@@ -24,7 +24,7 @@
     <string name="country">Countries</string>
     <string name="time_zone">Time zones</string>
     <string name="gmt_offset">GMT offset</string>
-    <string name="local_time">Local time</string>
+    <string name="local_time">Local time (hr)</string>
 
     <string name="results_country">"TIME ZONES IN <xliff:g id="country">%s</xliff:g>"</string>
     <string name="results_gmt">"TIME ZONES IN GMT <xliff:g id="offset">%s</xliff:g>"</string>

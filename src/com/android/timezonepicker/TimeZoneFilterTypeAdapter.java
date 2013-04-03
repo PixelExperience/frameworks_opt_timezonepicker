@@ -67,6 +67,13 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
         String constraint;
         public int time;
 
+        public FilterTypeResult(boolean showLabel, int type, String constraint, int time) {
+            this.showLabel = showLabel;
+            this.type = type;
+            this.constraint = constraint;
+            this.time = time;
+        }
+
         @Override
         public String toString() {
             return constraint;
@@ -229,12 +236,9 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                 handleSearchByGmt(filtered, num, positiveOnly);
 
                 // Search by time
-//                if (!gmtOnly) {
-//                    for(TimeZoneInfo tzi : mTimeZoneData.mTimeZones) {
-//                        tzi.getLocalHr(referenceTime)
-//                    }
-//                }
-
+                if (!gmtOnly) {
+                    handleSearchByTime(filtered, num);
+                }
             }
 
             // ////////////////////////////////////////
@@ -246,18 +250,12 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                 if (country != null && country.toLowerCase().startsWith(prefixString)) {
                     FilterTypeResult r;
                     if (first) {
-                        r = new FilterTypeResult();
+                        r = new FilterTypeResult(true, FILTER_TYPE_COUNTRY, null, 0);
                         filtered.add(r);
-                        r.type = FILTER_TYPE_COUNTRY;
-                        r.constraint = null;
-                        r.showLabel = true;
                         first = false;
                     }
-                    r = new FilterTypeResult();
+                    r = new FilterTypeResult(false, FILTER_TYPE_COUNTRY, country, 0);
                     filtered.add(r);
-                    r.type = FILTER_TYPE_COUNTRY;
-                    r.constraint = country;
-                    r.showLabel = false;
                 }
             }
 
@@ -270,18 +268,12 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                 if (timeZoneName.toLowerCase().startsWith(prefixString)) {
                     FilterTypeResult r;
                     if (first) {
-                        r = new FilterTypeResult();
+                        r = new FilterTypeResult(true, FILTER_TYPE_TIME_ZONE, null, 0);
                         filtered.add(r);
-                        r.type = FILTER_TYPE_TIME_ZONE;
-                        r.constraint = null;
-                        r.showLabel = true;
                         first = false;
                     }
-                    r = new FilterTypeResult();
+                    r = new FilterTypeResult(false, FILTER_TYPE_TIME_ZONE, timeZoneName, 0);
                     filtered.add(r);
-                    r.type = FILTER_TYPE_TIME_ZONE;
-                    r.constraint = timeZoneName;
-                    r.showLabel = false;
                 }
             }
 
@@ -295,61 +287,101 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
             return results;
         }
 
+        /**
+         * @param filtered
+         * @param num
+         */
+        private void handleSearchByTime(ArrayList<FilterTypeResult> filtered, int num) {
+            int originalResultCount = filtered.size();
+            // Separator
+            FilterTypeResult r = new FilterTypeResult(true, FILTER_TYPE_TIME, null, 0);
+            filtered.add(r);
+
+            long now = System.currentTimeMillis();
+
+            boolean[] hasTz = new boolean[24];
+
+            // TODO make this faster
+            for (TimeZoneInfo tzi : mTimeZoneData.mTimeZones) {
+                int localHr = tzi.getLocalHr(now);
+                hasTz[localHr] = true;
+            }
+
+            if (hasTz[num]) {
+                r = new FilterTypeResult(false, FILTER_TYPE_TIME,
+                        Integer.toString(num), num);
+                filtered.add(r);
+            }
+
+            int start = Integer.MAX_VALUE;
+            int end = Integer.MIN_VALUE;
+            if (TimeZoneData.is24HourFormat) {
+                switch (num) {
+                    case 1:
+                        start = 10;
+                        end = 23;
+                        break;
+                    case 2:
+                        start = 20;
+                        end = 23;
+                        break;
+                }
+            } else if (num == 1) {
+                start = 10;
+                end = 12;
+            }
+
+            for (int i = start; i < end; i++) {
+                if (hasTz[i]) {
+                    r = new FilterTypeResult(false, FILTER_TYPE_TIME,
+                            Integer.toString(i), i);
+                    filtered.add(r);
+                }
+            }
+
+            // Nothing was added except for the separator. Let's remove it.
+            if (filtered.size() == originalResultCount + 1) {
+                filtered.remove(originalResultCount);
+            }
+        }
+
         private void handleSearchByGmt(ArrayList<FilterTypeResult> filtered, int num,
                 boolean positiveOnly) {
             FilterTypeResult r;
             int originalResultCount = filtered.size();
 
             // Separator
-            r = new FilterTypeResult();
+            r = new FilterTypeResult(true, FILTER_TYPE_GMT, null, 0);
             filtered.add(r);
-            r.type = FILTER_TYPE_GMT;
-            r.showLabel = true;
 
             if (num >= 0) {
                 if (num == 1) {
                     for (int i = 19; i >= 10; i--) {
                         if (mTimeZoneData.hasTimeZonesInHrOffset(i)) {
-                            r = new FilterTypeResult();
+                            r = new FilterTypeResult(false, FILTER_TYPE_GMT, "GMT+" + i, i);
                             filtered.add(r);
-                            r.type = FILTER_TYPE_GMT;
-                            r.time = i;
-                            r.constraint = "GMT+" + r.time;
-                            r.showLabel = false;
                         }
                     }
                 }
 
                 if (mTimeZoneData.hasTimeZonesInHrOffset(num)) {
-                    r = new FilterTypeResult();
+                    r = new FilterTypeResult(false, FILTER_TYPE_GMT, "GMT+" + num, num);
                     filtered.add(r);
-                    r.type = FILTER_TYPE_GMT;
-                    r.time = num;
-                    r.constraint = "GMT+" + r.time;
-                    r.showLabel = false;
                 }
                 num *= -1;
             }
 
             if (!positiveOnly && num != 0) {
                 if (mTimeZoneData.hasTimeZonesInHrOffset(num)) {
-                    r = new FilterTypeResult();
+                    r = new FilterTypeResult(false, FILTER_TYPE_GMT, "GMT" + num, num);
                     filtered.add(r);
-                    r.type = FILTER_TYPE_GMT;
-                    r.time = num;
-                    r.constraint = "GMT" + r.time;
-                    r.showLabel = false;
                 }
 
                 if (num == -1) {
                     for (int i = -10; i >= -19; i--) {
                         if (mTimeZoneData.hasTimeZonesInHrOffset(i)) {
-                            r = new FilterTypeResult();
+                            r = new FilterTypeResult(false, FILTER_TYPE_GMT, "GMT" + i, i);
                             filtered.add(r);
-                            r.type = FILTER_TYPE_GMT;
-                            r.time = i;
-                            r.constraint = "GMT" + r.time;
-                            r.showLabel = false;
                         }
                     }
                 }
@@ -361,26 +393,6 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
             }
             return;
         }
-
-        //
-        // int start = Integer.MAX_VALUE;
-        // int end = Integer.MIN_VALUE;
-        // switch(num) {
-        // case 2:
-        // if (TimeZoneData.is24HourFormat) {
-        // start = 23;
-        // end = 20;
-        // }
-        // break;
-        // case 1:
-        // if (TimeZoneData.is24HourFormat) {
-        // start = 19;
-        // } else {
-        // start = 12;
-        // }
-        // end = 10;
-        // break;
-        // }
 
         /**
          * Acceptable strings are in the following format: [+-]?[0-9]?[0-9]

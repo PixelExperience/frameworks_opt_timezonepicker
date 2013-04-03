@@ -111,7 +111,7 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
     }
 
     public int getLocalHr(long referenceTime) {
-        recycledTime.timezone = TimeZone.getDefault().getID();
+        recycledTime.timezone = mTzId;
         recycledTime.set(referenceTime);
         return recycledTime.hour;
     }

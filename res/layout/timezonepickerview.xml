@@ -18,10 +18,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:descendantFocusability="beforeDescendants"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
+    android:layout_height="match_parent"
+    android:minHeight="400dp"
     android:orientation="vertical" >
 
     <AutoCompleteTextView
@@ -32,7 +30,6 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:completionThreshold="1"
-        android:dropDownHeight="250dp"
         android:hint="@string/hint_time_zone_search"
         android:imeOptions="actionDone"
         android:minHeight="48dp"

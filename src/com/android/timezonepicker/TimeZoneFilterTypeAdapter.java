@@ -93,8 +93,12 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
     public TimeZoneFilterTypeAdapter(Context context, TimeZoneData tzd, OnSetFilterListener l) {
         mTimeZoneData = tzd;
         mListener = l;
-
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return !mLiveResults.get(position).showLabel;
     }
 
     @Override

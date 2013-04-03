@@ -49,9 +49,7 @@ public class TimeZonePickerDialog extends DialogFragment implements
             Bundle savedInstanceState) {
         long timeMillis = 0;
         String timeZone = null;
-        if (savedInstanceState != null) {
-            // TODO
-        } else {
+        if (savedInstanceState == null) {
             Bundle b = getArguments();
             if (b != null) {
                 timeMillis = b.getLong(BUNDLE_START_TIME_MILLIS);
@@ -65,13 +63,7 @@ public class TimeZonePickerDialog extends DialogFragment implements
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-        Window w = dialog.getWindow();
-        WindowManager.LayoutParams a = w.getAttributes();
-        a.softInputMode |= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE;
-        a.softInputMode |= WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
-        w.setAttributes(a);
-
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         return dialog;
     }
 

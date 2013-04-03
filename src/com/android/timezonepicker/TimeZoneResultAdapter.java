@@ -156,11 +156,13 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
                 }
                 break;
             case TimeZoneFilterTypeAdapter.FILTER_TYPE_TIME_ZONE:
-                for (TimeZoneInfo tzi : mTimeZoneData.mTimeZones) {
-                    if (str.equalsIgnoreCase(tzi.mDisplayName)) {
-                        mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = idx;
+                if (str != null) {
+                    for (TimeZoneInfo tzi : mTimeZoneData.mTimeZones) {
+                        if (str.equalsIgnoreCase(tzi.mDisplayName)) {
+                            mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = idx;
+                        }
+                        idx++;
                     }
-                    idx++;
                 }
                 break;
             case TimeZoneFilterTypeAdapter.FILTER_TYPE_COUNTRY:

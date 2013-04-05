@@ -20,10 +20,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="400dp"
+    android:minWidth="300dp"
     android:orientation="vertical" >
 
     <AutoCompleteTextView
         android:id="@+id/searchBox"
+        style="@style/font_family_thin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -53,7 +55,7 @@
 
     <TextView
         style="@style/font_family_thin"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFECECEC"
         android:ellipsize="marquee"

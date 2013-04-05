@@ -57,15 +57,15 @@ AR	-5138-06913	America/Argentina/Rio_Gallegos	Santa Cruz (SC)
 AR	-5448-06818	America/Argentina/Ushuaia	Tierra del Fuego (TF)
 AS	-1416-17042	Pacific/Pago_Pago
 AT	+4813+01620	Europe/Vienna
+AU	-3352+15113	Australia/Sydney	New South Wales - most locations
+AU	-3455+13835	Australia/Adelaide	South Australia
 AU	-3133+15905	Australia/Lord_Howe	Lord Howe Island
 AU	-4253+14719	Australia/Hobart	Tasmania - most locations
 AU	-3956+14352	Australia/Currie	Tasmania - King Island
 AU	-3749+14458	Australia/Melbourne	Victoria
-AU	-3352+15113	Australia/Sydney	New South Wales - most locations
 AU	-3157+14127	Australia/Broken_Hill	New South Wales - Yancowinna
 AU	-2728+15302	Australia/Brisbane	Queensland - most locations
 AU	-2016+14900	Australia/Lindeman	Queensland - Holiday Islands
-AU	-3455+13835	Australia/Adelaide	South Australia
 AU	-1228+13050	Australia/Darwin	Northern Territory
 AU	-3157+11551	Australia/Perth	Western Australia - most locations
 AU	-3143+12852	Australia/Eucla	Western Australia - Eucla area
@@ -130,8 +130,8 @@ CA	+5333-11328	America/Edmonton	Mountain Time - Alberta, east British Columbia &
 CA	+690650-1050310	America/Cambridge_Bay	Mountain Time - west Nunavut
 CA	+6227-11421	America/Yellowknife	Mountain Time - central Northwest Territories
 CA	+682059-1334300	America/Inuvik	Mountain Time - west Northwest Territories
-CA	+4906-11631	America/Creston	Mountain Standard Time - Creston, British Columbia
 CA	+5946-12014	America/Dawson_Creek	Mountain Standard Time - Dawson Creek & Fort Saint John, British Columbia
+CA	+4906-11631	America/Creston	Mountain Standard Time - Creston, British Columbia
 CA	+4916-12307	America/Vancouver	Pacific Time - west British Columbia
 CA	+6043-13503	America/Whitehorse	Pacific Time - south Yukon
 CA	+6404-13925	America/Dawson	Pacific Time - north Yukon

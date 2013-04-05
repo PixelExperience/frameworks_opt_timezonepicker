@@ -266,20 +266,20 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
             // ////////////////////////////////////////
             // Search by time zone name
             // ////////////////////////////////////////
-            first = true;
-            for (String timeZoneName : mTimeZoneData.mTimeZoneNames) {
-                // TODO Perf - cache toLowerCase()?
-                if (timeZoneName.toLowerCase().startsWith(prefixString)) {
-                    FilterTypeResult r;
-                    if (first) {
-                        r = new FilterTypeResult(true, FILTER_TYPE_TIME_ZONE, null, 0);
-                        filtered.add(r);
-                        first = false;
-                    }
-                    r = new FilterTypeResult(false, FILTER_TYPE_TIME_ZONE, timeZoneName, 0);
-                    filtered.add(r);
-                }
-            }
+//            first = true;
+//            for (String timeZoneName : mTimeZoneData.mTimeZoneNames) {
+//                // TODO Perf - cache toLowerCase()?
+//                if (timeZoneName.toLowerCase().startsWith(prefixString)) {
+//                    FilterTypeResult r;
+//                    if (first) {
+//                        r = new FilterTypeResult(true, FILTER_TYPE_TIME_ZONE, null, 0);
+//                        filtered.add(r);
+//                        first = false;
+//                    }
+//                    r = new FilterTypeResult(false, FILTER_TYPE_TIME_ZONE, timeZoneName, 0);
+//                    filtered.add(r);
+//                }
+//            }
 
             // ////////////////////////////////////////
             // TODO Search by state

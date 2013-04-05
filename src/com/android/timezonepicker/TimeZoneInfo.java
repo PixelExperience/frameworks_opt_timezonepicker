@@ -308,19 +308,8 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
      */
     @Override
     public int compareTo(TimeZoneInfo other) {
-
-        // TODO !!! Should compare the clock time instead of raw offset
-
-        // Higher raw offset comes before i.e. if the offset is bigger, return
-        // positive number.
-        if (this.mRawoffset != other.mRawoffset) {
-            return other.mRawoffset - this.mRawoffset;
-        }
-
-        // TZ with DST comes first because the offset is bigger during DST
-        // compared to a tz without DST
-        if (this.hasDst != other.hasDst) {
-            return this.hasDst ? -1 : 1;
+        if (this.getNowOffsetMillis() != other.getNowOffsetMillis()) {
+            return other.getNowOffsetMillis() - this.getNowOffsetMillis();
         }
 
         // By country

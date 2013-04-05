@@ -18,6 +18,7 @@ package com.android.timezonepicker;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -53,8 +54,13 @@ public class TimeZoneData {
     private TimeZoneInfo mDefaultTimeZoneInfo;
     private String mAlternateDefaultTimeZoneId;
     private String mDefaultTimeZoneCountry;
+    private HashMap<String, TimeZoneInfo> mTimeZonesById;
+    private boolean[] mHasTimeZonesInHrOffset = new boolean[40];
+    SparseArray<ArrayList<Integer>> mTimeZonesByOffsets;
+    private Context mContext;
 
     public TimeZoneData(Context context, String defaultTimeZoneId, long timeMillis) {
+        mContext = context;
         is24HourFormat = TimeZoneInfo.is24HourFormat = DateFormat.is24HourFormat(context);
         mDefaultTimeZoneId = mAlternateDefaultTimeZoneId = defaultTimeZoneId;
         long now = System.currentTimeMillis();
@@ -65,6 +71,7 @@ public class TimeZoneData {
             mTimeMillis = timeMillis;
         }
         loadTzs(context);
+
         Log.i(TAG, "Time to load time zones (ms): " + (System.currentTimeMillis() - now));
 
         // now = System.currentTimeMillis();
@@ -115,6 +122,16 @@ public class TimeZoneData {
                 continue;
             }
 
+            /*
+             * Dropping non-GMT tzs without a country code. They are not
+             * really needed and they are dups but missing proper
+             * country codes. e.g. WET CET MST7MDT PST8PDT Asia/Khandyga
+             * Asia/Ust-Nera EST
+             */
+            if (!tzId.startsWith("Etc/GMT")) {
+                continue;
+            }
+
             final TimeZone tz = TimeZone.getTimeZone(tzId);
             if (tz == null) {
                 Log.e(TAG, "Timezone not found: " + tzId);
@@ -153,17 +170,54 @@ public class TimeZoneData {
 
         // Don't change the order of mTimeZones after this sort
         Collections.sort(mTimeZones);
+        // TimeZoneInfo last = null;
+        // boolean first = true;
+        // for (TimeZoneInfo tz : mTimeZones) {
+        // // All
+        // Log.e("ALL", tz.toString());
+        //
+        // // GMT
+        // String name = tz.mTz.getDisplayName();
+        // if (name.startsWith("GMT") && !tz.mTzId.startsWith("Etc/GMT")) {
+        // Log.e("GMT", tz.toString());
+        // }
+        //
+        // // Dups
+        // if (last != null) {
+        // if (last.compareTo(tz) == 0) {
+        // if (first) {
+        // Log.e("SAME", last.toString());
+        // first = false;
+        // }
+        // Log.e("SAME", tz.toString());
+        // } else {
+        // first = true;
+        // }
+        // }
+        // last = tz;
+        // }
 
         mTimeZonesByCountry = new LinkedHashMap<String, ArrayList<Integer>>();
         mTimeZonesByOffsets = new SparseArray<ArrayList<Integer>>(mHasTimeZonesInHrOffset.length);
+        mTimeZonesById = new HashMap<String, TimeZoneInfo>(mTimeZones.size());
+        for (TimeZoneInfo tz : mTimeZones) {
+            // /////////////////////
+            // Lookup map for id -> tz
+            mTimeZonesById.put(tz.mTzId, tz);
+        }
+        populateDisplayNameOverrides(mContext.getResources());
 
         Date date = new Date(mTimeMillis);
         Locale defaultLocal = Locale.getDefault();
 
         int idx = 0;
         for (TimeZoneInfo tz : mTimeZones) {
-            tz.mDisplayName = tz.mTz.getDisplayName(tz.mTz.inDaylightTime(date),
-                    TimeZone.LONG, defaultLocal);
+            // /////////////////////
+            // Populate display name
+            if (tz.mDisplayName == null) {
+                tz.mDisplayName = tz.mTz.getDisplayName(tz.mTz.inDaylightTime(date),
+                        TimeZone.LONG, defaultLocal);
+            }
 
             // /////////////////////
             // Grouping tz's by country for search by country
@@ -191,8 +245,22 @@ public class TimeZoneData {
         }
     }
 
-    private boolean[] mHasTimeZonesInHrOffset = new boolean[40];
-    SparseArray<ArrayList<Integer>> mTimeZonesByOffsets;
+    private void populateDisplayNameOverrides(Resources resources) {
+        String[] ids = resources.getStringArray(R.array.timezone_rename_ids);
+        String[] labels = resources.getStringArray(R.array.timezone_rename_labels);
+
+        int length = ids.length;
+        if (ids.length != labels.length) {
+            Log.e(TAG, "timezone_rename_ids len=" + ids.length + " timezone_rename_labels len="
+                    + labels.length);
+            length = Math.min(ids.length, labels.length);
+        }
+
+        for (int i = 0; i < length; i++) {
+            TimeZoneInfo tzi = mTimeZonesById.get(ids[i]);
+            tzi.mDisplayName = labels[i];
+        }
+    }
 
     public boolean hasTimeZonesInHrOffset(int offsetHr) {
         int index = OFFSET_ARRAY_OFFSET + offsetHr;
@@ -302,9 +370,20 @@ public class TimeZoneData {
                         continue;
                     }
 
+                    /*
+                     * Dropping non-GMT tzs without a country code. They are not
+                     * really needed and they are dups but missing proper
+                     * country codes. e.g. WET CET MST7MDT PST8PDT Asia/Khandyga
+                     * Asia/Ust-Nera EST
+                     */
+                    if (countryCode == null && !timeZoneId.startsWith("Etc/GMT")) {
+                        processedTimeZones.add(timeZoneId);
+                        continue;
+                    }
+
                     // Remember the mapping between the country code and display
                     // name
-                    String country = mCountryCodeToNameMap.get(fields[0]);
+                    String country = mCountryCodeToNameMap.get(countryCode);
                     if (country == null) {
                         country = new Locale(lang, countryCode)
                                 .getDisplayCountry(Locale.getDefault());

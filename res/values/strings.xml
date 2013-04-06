@@ -20,10 +20,10 @@
      [CHAR LIMIT=25] -->
     <string name="hint_time_zone_search">Country</string>
 
-    <!-- Label for the currently selected time zone [CHAR LIMIT=25] -->
-    <string name="currenttime_zone">CURRENT TIME ZONE</string>
+    <!-- Label for the currently selected time zone [CHAR LIMIT=30] -->
+    <string name="current_time_zone">CURRENT TIME ZONE</string>
 
-    <!-- Label for the recently selected time zones [CHAR LIMIT=25] -->
+    <!-- Label for the recently selected time zones [CHAR LIMIT=30] -->
     <plurals name="recent_time_zone">
         <item quantity="one">RECENT TIME ZONE</item>
         <!-- This is the label for 2 or more time zones. -->

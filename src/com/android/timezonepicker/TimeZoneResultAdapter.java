@@ -53,16 +53,21 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
     /** The maximum number of recent timezones to save */
     private static final int MAX_RECENT_TIMEZONES = 3;
 
+    private static final int RESULT_LABEL_RECENT = -100;
+    private static final int RESULT_LABEL_CURRENT = -200;
+
     static class ViewHolder {
         TextView timeZone;
         TextView timeOffset;
         TextView location;
+        TextView label;
 
         static void setupViewHolder(View v) {
             ViewHolder vh = new ViewHolder();
             vh.timeZone = (TextView) v.findViewById(R.id.time_zone);
             vh.timeOffset = (TextView) v.findViewById(R.id.time_offset);
             vh.location = (TextView) v.findViewById(R.id.location);
+            vh.label = (TextView) v.findViewById(R.id.label);
             v.setTag(vh);
         }
     }
@@ -108,6 +113,7 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
                 // Show the default/current value first
                 int defaultTzIndex = mTimeZoneData.getDefaultTimeZoneIndex();
                 if (defaultTzIndex != -1) {
+                    mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = RESULT_LABEL_CURRENT;
                     mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = defaultTzIndex;
                 }
 
@@ -117,11 +123,17 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
                 String recentsString = prefs.getString(KEY_RECENT_TIMEZONES, null);
                 if (!TextUtils.isEmpty(recentsString)) {
                     String[] recents = recentsString.split(RECENT_TIMEZONES_DELIMITER);
+                    boolean first = true;
                     for (int i = recents.length - 1; i >= 0; i--) {
                         if (!TextUtils.isEmpty(recents[i])
                                 && !recents[i].equals(mTimeZoneData.mDefaultTimeZoneId)) {
                             int index = mTimeZoneData.findIndexByTimeZoneIdSlow(recents[i]);
                             if (index != -1) {
+                                if (first) {
+                                    mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] =
+                                            RESULT_LABEL_RECENT;
+                                    first = false;
+                                }
                                 mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = index;
                             }
                         }
@@ -145,7 +157,7 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
                     boolean match = localHr == time;
                     if (!match && !TimeZoneData.is24HourFormat) {
                         // PM + noon cases
-                        if((time + 12 == localHr) || (time == 12 && localHr == 0)) {
+                        if ((time + 12 == localHr) || (time == 12 && localHr == 0)) {
                             match = true;
                         }
                     }
@@ -200,7 +212,7 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
             List<String> recents = new ArrayList<String>(
                     Arrays.asList(recentsString.split(RECENT_TIMEZONES_DELIMITER)));
             Iterator<String> it = recents.iterator();
-            while(it.hasNext()) {
+            while (it.hasNext()) {
                 String tz = it.next();
                 if (id.equals(tz)) {
                     it.remove();
@@ -234,12 +246,24 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
     }
 
     @Override
-    public TimeZoneInfo getItem(int position) {
+    public Object getItem(int position) {
         if (position < 0 || position >= mFilteredTimeZoneLength) {
             return null;
         }
 
+        switch (mFilteredTimeZoneIndices[position]) {
+            case RESULT_LABEL_CURRENT:
+                return "CURRENT TIME ZONE";
+            case RESULT_LABEL_RECENT:
+                return "RECENT TIME ZONE";
+        }
+
         return mTimeZoneData.get(mFilteredTimeZoneIndices[position]);
+    }
+
+    @Override
+    public boolean isEnabled(int position) {
+        return mFilteredTimeZoneIndices[position] >= 0;
     }
 
     @Override
@@ -257,20 +281,38 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
             ViewHolder.setupViewHolder(v);
         }
 
-        TimeZoneInfo tzi = mTimeZoneData.get(mFilteredTimeZoneIndices[position]);
-        v.setTag(VIEW_TAG_TIME_ZONE, tzi);
-
         ViewHolder vh = (ViewHolder) v.getTag();
-        vh.timeOffset.setText(tzi.getGmtDisplayName(mContext));
 
-        vh.timeZone.setText(tzi.mDisplayName);
+        if (mFilteredTimeZoneIndices[position] >= 0) {
+            TimeZoneInfo tzi = mTimeZoneData.get(mFilteredTimeZoneIndices[position]);
+            v.setTag(VIEW_TAG_TIME_ZONE, tzi);
 
-        String location = tzi.mCountry;
-        if (location == null) {
-            vh.location.setVisibility(View.INVISIBLE);
+            vh.label.setVisibility(View.GONE);
+            vh.timeZone.setText(tzi.mDisplayName);
+            vh.timeZone.setVisibility(View.VISIBLE);
+
+            vh.timeOffset.setText(tzi.getGmtDisplayName(mContext));
+            vh.timeOffset.setVisibility(View.VISIBLE);
+
+            String location = tzi.mCountry;
+            if (location == null) {
+                vh.location.setVisibility(View.INVISIBLE);
+            } else {
+                vh.location.setText(location);
+                vh.location.setVisibility(View.VISIBLE);
+            }
         } else {
-            vh.location.setText(location);
-            vh.location.setVisibility(View.VISIBLE);
+            if (mFilteredTimeZoneIndices[position] == RESULT_LABEL_CURRENT) {
+                vh.label.setText(v.getResources().getText(R.string.current_time_zone));
+            } else if (mFilteredTimeZoneIndices[position] == RESULT_LABEL_RECENT) {
+                vh.label.setText(v.getResources().getQuantityText(R.plurals.recent_time_zone,
+                        /* num of recent tzs */ mFilteredTimeZoneLength - position - 1));
+            }
+            vh.label.setVisibility(View.VISIBLE);
+            vh.timeZone.setVisibility(View.GONE);
+            vh.timeOffset.setVisibility(View.GONE);
+            vh.location.setVisibility(View.GONE);
+            v.setTag(VIEW_TAG_TIME_ZONE, null);
         }
 
         return v;

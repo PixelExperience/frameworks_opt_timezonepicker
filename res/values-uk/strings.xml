@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+     Copyright (C) 2013 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+ -->
+
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- no translation found for hint_time_zone_search (5383328007067667343) -->
+    <skip />
+    <string name="currenttime_zone" msgid="2405124989837295738">"ПОТОЧНИЙ ЧАСОВИЙ ПОЯС"</string>
+    <!-- no translation found for recent_time_zone:one (3160399884299421609) -->
+    <!-- no translation found for recent_time_zone:other (977876440715483041) -->
+    <!-- no translation found for country (4435526943498223723) -->
+    <skip />
+    <string name="time_zone" msgid="7596741004923832245">"Часові пояси"</string>
+    <string name="gmt_offset" msgid="1423212735204762062">"Зміщення за GMT"</string>
+    <string name="local_time" msgid="6767659693881978111">"Місцевий час (год)"</string>
+    <string name="results_country" msgid="8042876404471058354">"ЧАСОВІ ПОЯСИ – <xliff:g id="COUNTRY">%s</xliff:g>"</string>
+    <string name="results_gmt" msgid="150119647642882676">"ЧАСОВІ ПОЯСИ – GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
+    <string name="results_local_type" msgid="7740791760342005442">"ЧАСОВІ ПОЯСИ – <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
+    <!-- no translation found for dst_note (7960397878968451833) -->
+    <skip />
+</resources>

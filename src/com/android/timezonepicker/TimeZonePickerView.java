@@ -17,14 +17,19 @@
 package com.android.timezonepicker;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
+import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -35,6 +40,8 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
     private AutoCompleteTextView mAutoCompleteTextView;
     private TimeZoneFilterTypeAdapter mFilterAdapter;
     TimeZoneResultAdapter mResultAdapter;
+
+    private ImageButton mClearButton;
 
     public interface OnTimeZoneSetListener {
         void onTimeZoneSet(TimeZoneInfo tzi);
@@ -59,6 +66,27 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
         mAutoCompleteTextView.setAdapter(mFilterAdapter);
         mAutoCompleteTextView.addTextChangedListener(this);
         mAutoCompleteTextView.setOnItemClickListener(this);
+
+        updateHint(R.string.hint_time_zone_search, R.drawable.ic_search_holo_light);
+        mClearButton = (ImageButton) findViewById(R.id.clear_search);
+        mClearButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAutoCompleteTextView.getEditableText().clear();
+            }
+        });
+    }
+
+    private void updateHint(int hintTextId, int imageDrawableId) {
+        String hintText = getResources().getString(hintTextId);
+        Drawable searchIcon = getResources().getDrawable(imageDrawableId);
+
+        SpannableStringBuilder ssb = new SpannableStringBuilder("   "); // for the icon
+        ssb.append(hintText);
+        int textSize = (int) (mAutoCompleteTextView.getTextSize() * 1.25);
+        searchIcon.setBounds(0, 0, textSize, textSize);
+        ssb.setSpan(new ImageSpan(searchIcon), 1, 2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mAutoCompleteTextView.setHint(ssb);
     }
 
     // Implementation of TextWatcher
@@ -75,6 +103,9 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
     // Implementation of TextWatcher
     @Override
     public void afterTextChanged(Editable s) {
+        if (mClearButton != null) {
+            mClearButton.setVisibility(s.length() > 0 ? View.VISIBLE : View.GONE);
+        }
     }
 
     @Override

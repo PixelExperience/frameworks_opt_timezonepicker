@@ -182,7 +182,9 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
             mSB.append(')');
 
             if (hasFutureDST) {
-                mSB.append(" \u2600"); // Sun symbol
+                String dstSymbol = TimeZonePickerUtils.getDstSymbol();
+                mSB.append(" ");
+                mSB.append(dstSymbol); // Sun symbol
             }
 
             displayName = mSB.toString();

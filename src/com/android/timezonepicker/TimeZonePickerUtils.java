@@ -16,6 +16,8 @@
 
 package com.android.timezonepicker;
 
+import android.content.Context;
+import android.os.Build;
 import android.text.format.DateUtils;
 import android.text.format.Time;
 
@@ -23,6 +25,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class TimeZonePickerUtils {
+
+    private static String mDstSymbol;
 
     /**
      * Given a timezone id (e.g. America/Los_Angeles), returns the corresponding timezone
@@ -73,9 +77,19 @@ public class TimeZonePickerUtils {
         sb.append(displayName);
 
         if (tz.useDaylightTime()) {
-            sb.append(" \u2600"); // Sun symbol
+            String dstSymbol = getDstSymbol();
+            sb.append(" ");
+            sb.append(dstSymbol); // Sun symbol
         }
         return sb.toString();
+    }
+
+    public static String getDstSymbol() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            return "\u2600"; // The Sun emoji icon.
+        } else {
+            return "*";
+        }
     }
 
 }

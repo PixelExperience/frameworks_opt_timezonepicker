@@ -22,8 +22,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -35,7 +36,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListener,
+public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickListener,
         OnSetFilterListener {
     private static final String TAG = "TimeZoneResultAdapter";
     private static final int VIEW_TAG_TIME_ZONE = R.id.time_zone;
@@ -262,6 +263,11 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
     }
 
     @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
     public boolean isEnabled(int position) {
         return mFilteredTimeZoneIndices[position] >= 0;
     }
@@ -277,7 +283,6 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
 
         if (v == null) {
             v = mInflater.inflate(R.layout.time_zone_item, null);
-            v.setOnClickListener(this);
             ViewHolder.setupViewHolder(v);
         }
 
@@ -323,14 +328,13 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnClickListene
         return true;
     }
 
-    // Implements OnClickListener
+    // Implements OnItemClickListener
     @Override
-    public void onClick(View v) {
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         if (mTimeZoneSetListener != null) {
             TimeZoneInfo tzi = (TimeZoneInfo) v.getTag(VIEW_TAG_TIME_ZONE);
             mTimeZoneSetListener.onTimeZoneSet(tzi);
             saveRecentTimezone(tzi.mTzId);
         }
     }
-
 }

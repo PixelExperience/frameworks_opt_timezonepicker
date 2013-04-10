@@ -19,7 +19,8 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- no translation found for hint_time_zone_search (5383328007067667343) -->
     <skip />
-    <string name="currenttime_zone" msgid="2405124989837295738">"UMKHAWULO WESIKHATHI SAMANJE"</string>
+    <!-- no translation found for current_time_zone (5603376793234386934) -->
+    <skip />
     <!-- no translation found for recent_time_zone:one (3160399884299421609) -->
     <!-- no translation found for recent_time_zone:other (977876440715483041) -->
     <!-- no translation found for country (4435526943498223723) -->
@@ -31,5 +32,7 @@
     <string name="results_gmt" msgid="150119647642882676">"UMKHAWULO WESIKHATHI KU-GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"IMIKHAWULO YESIKHATHI NGO-<xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
     <!-- no translation found for dst_note (7960397878968451833) -->
+    <skip />
+    <!-- no translation found for searchview_description_clear (1603860069305867810) -->
     <skip />
 </resources>

@@ -97,6 +97,11 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
     }
 
     @Override
+    public boolean areAllItemsEnabled() {
+        return false;
+    }
+
+    @Override
     public boolean isEnabled(int position) {
         return !mLiveResults.get(position).showLabel;
     }

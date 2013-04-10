@@ -60,6 +60,7 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
         mResultAdapter = new TimeZoneResultAdapter(mContext, tzd, l);
         ListView timeZoneList = (ListView) findViewById(R.id.timezonelist);
         timeZoneList.setAdapter(mResultAdapter);
+        timeZoneList.setOnItemClickListener(mResultAdapter);
 
         mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.searchBox);
         mFilterAdapter = new TimeZoneFilterTypeAdapter(mContext, tzd, mResultAdapter);

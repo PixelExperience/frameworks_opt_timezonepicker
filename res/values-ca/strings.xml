@@ -19,17 +19,20 @@
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- no translation found for hint_time_zone_search (5383328007067667343) -->
     <skip />
-    <string name="currenttime_zone" msgid="2405124989837295738">"ZONA HORÀRIA ACTUAL"</string>
+    <!-- no translation found for current_time_zone (5603376793234386934) -->
+    <skip />
     <!-- no translation found for recent_time_zone:one (3160399884299421609) -->
     <!-- no translation found for recent_time_zone:other (977876440715483041) -->
     <!-- no translation found for country (4435526943498223723) -->
     <skip />
     <string name="time_zone" msgid="7596741004923832245">"Zones horàries"</string>
-    <string name="gmt_offset" msgid="1423212735204762062">"Diferència horària respecte a GMT"</string>
+    <string name="gmt_offset" msgid="1423212735204762062">"Diferència amb GMT"</string>
     <string name="local_time" msgid="6767659693881978111">"Hora local (h)"</string>
     <string name="results_country" msgid="8042876404471058354">"ZONES HORÀRIES A <xliff:g id="COUNTRY">%s</xliff:g>"</string>
     <string name="results_gmt" msgid="150119647642882676">"ZONES HORÀRIES EN GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
-    <string name="results_local_type" msgid="7740791760342005442">"ZONES  HORÀRIES A <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
+    <string name="results_local_type" msgid="7740791760342005442">"ZONES HORÀRIES A LES <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
     <!-- no translation found for dst_note (7960397878968451833) -->
+    <skip />
+    <!-- no translation found for searchview_description_clear (1603860069305867810) -->
     <skip />
 </resources>

@@ -17,19 +17,19 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- no translation found for hint_time_zone_search (5383328007067667343) -->
-    <skip />
-    <string name="currenttime_zone" msgid="2405124989837295738">"CURRENT TIME ZONE"</string>
-    <!-- no translation found for recent_time_zone:one (3160399884299421609) -->
-    <!-- no translation found for recent_time_zone:other (977876440715483041) -->
-    <!-- no translation found for country (4435526943498223723) -->
-    <skip />
+    <string name="hint_time_zone_search" msgid="5383328007067667343">"Country"</string>
+    <string name="current_time_zone" msgid="5603376793234386934">"CURRENT TIME ZONE"</string>
+  <plurals name="recent_time_zone">
+    <item quantity="one" msgid="3160399884299421609">"RECENT TIME ZONE"</item>
+    <item quantity="other" msgid="977876440715483041">"RECENT TIME ZONES"</item>
+  </plurals>
+    <string name="country" msgid="4435526943498223723">"Country"</string>
     <string name="time_zone" msgid="7596741004923832245">"Time zones"</string>
     <string name="gmt_offset" msgid="1423212735204762062">"GMT offset"</string>
     <string name="local_time" msgid="6767659693881978111">"Local time (hr)"</string>
     <string name="results_country" msgid="8042876404471058354">"TIME ZONES IN <xliff:g id="COUNTRY">%s</xliff:g>"</string>
     <string name="results_gmt" msgid="150119647642882676">"TIME ZONES IN GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"TIME ZONES AT <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
-    <!-- no translation found for dst_note (7960397878968451833) -->
-    <skip />
+    <string name="dst_note" msgid="7960397878968451833">"☀ Observes daylight saving time"</string>
+    <string name="searchview_description_clear" msgid="1603860069305867810">"Clear query"</string>
 </resources>

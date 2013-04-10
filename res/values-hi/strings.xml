@@ -25,12 +25,12 @@
     <!-- no translation found for recent_time_zone:other (977876440715483041) -->
     <!-- no translation found for country (4435526943498223723) -->
     <skip />
-    <string name="time_zone" msgid="7596741004923832245">"Laika joslas"</string>
-    <string name="gmt_offset" msgid="1423212735204762062">"GMT novirze"</string>
-    <string name="local_time" msgid="6767659693881978111">"Vietējais laiks (h)"</string>
-    <string name="results_country" msgid="8042876404471058354">"LAIKA JOSLAS ŠĀDĀ VALSTĪ: <xliff:g id="COUNTRY">%s</xliff:g>"</string>
-    <string name="results_gmt" msgid="150119647642882676">"LAIKA JOSLAS AR ŠĀDU NOBĪDI: GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
-    <string name="results_local_type" msgid="7740791760342005442">"LAIKA JOSLAS, KURĀS PAŠREIZĒJAIS LAIKS IR ŠĀDS: <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
+    <string name="time_zone" msgid="7596741004923832245">"समय क्षेत्र"</string>
+    <string name="gmt_offset" msgid="1423212735204762062">"GMT ऑफ़सेट"</string>
+    <string name="local_time" msgid="6767659693881978111">"स्थानीय समय (घंटे)"</string>
+    <string name="results_country" msgid="8042876404471058354">"<xliff:g id="COUNTRY">%s</xliff:g> के समय क्षेत्र"</string>
+    <string name="results_gmt" msgid="150119647642882676">"GMT <xliff:g id="OFFSET">%s</xliff:g> के समय क्षेत्र"</string>
+    <string name="results_local_type" msgid="7740791760342005442">"<xliff:g id="LOCAL_TIME">%s</xliff:g> के समय क्षेत्र"</string>
     <!-- no translation found for dst_note (7960397878968451833) -->
     <skip />
     <!-- no translation found for searchview_description_clear (1603860069305867810) -->

@@ -256,15 +256,20 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
             boolean first = true;
             for (String country : mTimeZoneData.mTimeZonesByCountry.keySet()) {
                 // TODO Perf - cache toLowerCase()?
-                if (country != null && country.toLowerCase().startsWith(prefixString)) {
-                    FilterTypeResult r;
-                    if (first) {
-                        r = new FilterTypeResult(true, FILTER_TYPE_COUNTRY, null, 0);
+                if (!TextUtils.isEmpty(country)) {
+                    final String lowerCaseCountry = country.toLowerCase();
+                    if (lowerCaseCountry.startsWith(prefixString)
+                            || (lowerCaseCountry.charAt(0) == prefixString.charAt(0) &&
+                            isStartingInitialsFor(prefixString, lowerCaseCountry))) {
+                        FilterTypeResult r;
+                        if (first) {
+                            r = new FilterTypeResult(true, FILTER_TYPE_COUNTRY, null, 0);
+                            filtered.add(r);
+                            first = false;
+                        }
+                        r = new FilterTypeResult(false, FILTER_TYPE_COUNTRY, country, 0);
                         filtered.add(r);
-                        first = false;
                     }
-                    r = new FilterTypeResult(false, FILTER_TYPE_COUNTRY, country, 0);
-                    filtered.add(r);
                 }
             }
 
@@ -294,6 +299,45 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
             results.values = filtered;
             results.count = filtered.size();
             return results;
+        }
+
+        /**
+         * Returns true if the prefixString is an initial for string. Note that
+         * this method will return true even if prefixString does not cover all
+         * the words. Words are separated by non-letters which includes spaces
+         * and symbols).
+         *
+         * For example:
+         * isStartingInitialsFor("UA", "United Arb Emirates") would return true
+         * isStartingInitialsFor("US", "U.S. Virgin Island") would return true
+
+         * @param prefixString
+         * @param string
+         * @return
+         */
+        private boolean isStartingInitialsFor(String prefixString, String string) {
+            final int initialLen = prefixString.length();
+            final int strLen = string.length();
+
+            int initialIdx = 0;
+            boolean wasWordBreak = true;
+            for (int i = 0; i < strLen; i++) {
+                if (!Character.isLetter(string.charAt(i))) {
+                    wasWordBreak = true;
+                    continue;
+                }
+
+                if (wasWordBreak) {
+                    if (prefixString.charAt(initialIdx++) != string.charAt(i)) {
+                        return false;
+                    }
+                    if (initialIdx == initialLen) {
+                        return true;
+                    }
+                    wasWordBreak = false;
+                }
+            }
+            return false;
         }
 
         /**

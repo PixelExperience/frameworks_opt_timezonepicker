@@ -385,8 +385,7 @@ public class TimeZoneData {
                     // name
                     String country = mCountryCodeToNameMap.get(countryCode);
                     if (country == null) {
-                        country = new Locale(lang, countryCode)
-                                .getDisplayCountry(Locale.getDefault());
+                        country = getCountryNames(lang, countryCode);
                         mCountryCodeToNameMap.put(countryCode, country);
                     }
 
@@ -454,6 +453,38 @@ public class TimeZoneData {
         }
 
         return processedTimeZones;
+    }
+
+    @SuppressWarnings("unused")
+    private static Locale mBackupCountryLocale;
+    private static String[] mBackupCountryCodes;
+    private static String[] mBackupCountryNames;
+
+    private String getCountryNames(String lang, String countryCode) {
+        final Locale defaultLocale = Locale.getDefault();
+        String countryDisplayName = new Locale(lang, countryCode).getDisplayCountry(defaultLocale);
+
+        if (!countryCode.equals(countryDisplayName)) {
+            return countryDisplayName;
+        }
+
+        if (mBackupCountryCodes == null || !defaultLocale.equals(mBackupCountryLocale)) {
+            mBackupCountryLocale = defaultLocale;
+            mBackupCountryCodes = mContext.getResources().getStringArray(
+                    R.array.backup_country_codes);
+            mBackupCountryNames = mContext.getResources().getStringArray(
+                    R.array.backup_country_names);
+        }
+
+        int length = Math.min(mBackupCountryCodes.length, mBackupCountryNames.length);
+
+        for (int i = 0; i < length; i++) {
+            if (mBackupCountryCodes[i].equals(countryCode)) {
+                return mBackupCountryNames[i];
+            }
+        }
+
+        return countryCode;
     }
 
     private int getIdenticalTimeZoneInTheCountry(TimeZoneInfo timeZoneInfo) {

@@ -53,7 +53,7 @@
 
     <!-- Legend for the * symbol to mean that the time zone has
      a future day light savings time [CHAR LIMIT=30] -->
-    <string name="dst_note">\u2600 Observes daylight saving time</string>
+    <string name="dst_note">\u002A Observes daylight saving time</string>
 
     <!-- Description of clear icon in the search bar, for accessibility. [CHAR LIMIT=NONE]-->
     <string name="searchview_description_clear">Clear query</string>

@@ -17,34 +17,60 @@
 package com.android.timezonepicker;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.util.Log;
 
 import java.util.Locale;
 import java.util.TimeZone;
 
 public class TimeZonePickerUtils {
+    private static final String TAG = "TimeZonePickerUtils";
 
-    private static String mDstSymbol;
+    private Locale mDefaultLocale;
+    private String[] mOverrideIds;
+    private String[] mOverrideLabels;
+
+    /**
+     * This needs to be an instantiated class so that it doesn't need to continuously re-load the
+     * list of timezone IDs that need to be overridden.
+     * @param context
+     */
+    public TimeZonePickerUtils(Context context) {
+        // Instead of saving a reference to the context (because we might need to look up the
+        // labels every time getGmtDisplayName is called), we'll cache the lists of override IDs
+        // and labels now.
+        cacheOverrides(context);
+    }
 
     /**
      * Given a timezone id (e.g. America/Los_Angeles), returns the corresponding timezone
      * display name (e.g. (GMT-7.00) Pacific Time).
      *
+     * @param context Context in case the override labels need to be re-cached.
      * @param id The timezone id
      * @param millis The time (daylight savings or not)
      * @return The display name of the timezone.
      */
-    public static String getGmtDisplayName(String id, long millis) {
+    public String getGmtDisplayName(Context context, String id, long millis) {
         TimeZone timezone = TimeZone.getTimeZone(id);
         if (timezone == null) {
             return null;
         }
+
+        final Locale defaultLocale = Locale.getDefault();
+        if (!defaultLocale.equals(mDefaultLocale)) {
+            // If the IDs and labels haven't been set yet, or if the locale has been changed
+            // recently, we'll need to re-cache them.
+            mDefaultLocale = defaultLocale;
+            cacheOverrides(context);
+        }
         return buildGmtDisplayName(timezone, millis);
     }
 
-    private static String buildGmtDisplayName(TimeZone tz, long timeMillis) {
+    private String buildGmtDisplayName(TimeZone tz, long timeMillis) {
         Time time = new Time(tz.getID());
         time.set(timeMillis);
 
@@ -71,9 +97,7 @@ public class TimeZonePickerUtils {
         }
         sb.append(") ");
 
-        // tz.inDaylightTime(new Date(timeMillis))
-        String displayName = tz.getDisplayName(time.isDst != 0, TimeZone.LONG,
-                Locale.getDefault());
+        String displayName = getDisplayName(tz, time.isDst != 0);
         sb.append(displayName);
 
         if (tz.useDaylightTime()) {
@@ -92,4 +116,41 @@ public class TimeZonePickerUtils {
         }
     }
 
+    /**
+     * Gets the display name for the specified Timezone ID. If the ID matches the list of IDs that
+     * need to be have their default display names overriden, use the pre-set display name from
+     * R.arrays.
+     * @param id The timezone ID.
+     * @param daylightTime True for daylight time, false for standard time
+     * @return The display name of the timezone. This will just use the default display name,
+     * except that certain timezones have poor defaults, and should use the pre-set override labels
+     * from R.arrays.
+     */
+    private String getDisplayName(TimeZone tz, boolean daylightTime) {
+        if (mOverrideIds == null || mOverrideLabels == null) {
+            // Just in case they somehow didn't get loaded correctly.
+            return tz.getDisplayName(daylightTime, TimeZone.LONG, Locale.getDefault());
+        }
+
+        for (int i = 0; i < mOverrideIds.length; i++) {
+            if (tz.getID().equals(mOverrideIds[i])) {
+                if (mOverrideLabels.length > i) {
+                    return mOverrideLabels[i];
+                }
+                Log.e(TAG, "timezone_rename_ids len=" + mOverrideIds.length +
+                        " timezone_rename_labels len=" + mOverrideLabels.length);
+                break;
+            }
+        }
+
+        // If the ID doesn't need to have the display name overridden, or if the labels were
+        // malformed, just use the default.
+        return tz.getDisplayName(daylightTime, TimeZone.LONG, Locale.getDefault());
+    }
+
+    private void cacheOverrides(Context context) {
+        Resources res = context.getResources();
+        mOverrideIds = res.getStringArray(R.array.timezone_rename_ids);
+        mOverrideLabels = res.getStringArray(R.array.timezone_rename_labels);
+    }
 }

@@ -123,10 +123,9 @@ public class TimeZoneData {
             }
 
             /*
-             * Dropping non-GMT tzs without a country code. They are not
-             * really needed and they are dups but missing proper
-             * country codes. e.g. WET CET MST7MDT PST8PDT Asia/Khandyga
-             * Asia/Ust-Nera EST
+             * Dropping non-GMT tzs without a country code. They are not really
+             * needed and they are dups but missing proper country codes. e.g.
+             * WET CET MST7MDT PST8PDT Asia/Khandyga Asia/Ust-Nera EST
              */
             if (!tzId.startsWith("Etc/GMT")) {
                 continue;
@@ -170,32 +169,6 @@ public class TimeZoneData {
 
         // Don't change the order of mTimeZones after this sort
         Collections.sort(mTimeZones);
-        // TimeZoneInfo last = null;
-        // boolean first = true;
-        // for (TimeZoneInfo tz : mTimeZones) {
-        // // All
-        // Log.e("ALL", tz.toString());
-        //
-        // // GMT
-        // String name = tz.mTz.getDisplayName();
-        // if (name.startsWith("GMT") && !tz.mTzId.startsWith("Etc/GMT")) {
-        // Log.e("GMT", tz.toString());
-        // }
-        //
-        // // Dups
-        // if (last != null) {
-        // if (last.compareTo(tz) == 0) {
-        // if (first) {
-        // Log.e("SAME", last.toString());
-        // first = false;
-        // }
-        // Log.e("SAME", tz.toString());
-        // } else {
-        // first = true;
-        // }
-        // }
-        // last = tz;
-        // }
 
         mTimeZonesByCountry = new LinkedHashMap<String, ArrayList<Integer>>();
         mTimeZonesByOffsets = new SparseArray<ArrayList<Integer>>(mHasTimeZonesInHrOffset.length);
@@ -243,6 +216,42 @@ public class TimeZoneData {
 
             idx++;
         }
+
+        // printTimeZones();
+    }
+
+    private void printTimeZones() {
+        TimeZoneInfo last = null;
+        boolean first = true;
+        for (TimeZoneInfo tz : mTimeZones) {
+            // All
+            if (false) {
+                Log.e("ALL", tz.toString());
+            }
+
+            // GMT
+            if (true) {
+                String name = tz.mTz.getDisplayName();
+                if (name.startsWith("GMT") && !tz.mTzId.startsWith("Etc/GMT")) {
+                    Log.e("GMT", tz.toString());
+                }
+            }
+
+            // Dups
+            if (true && last != null) {
+                if (last.compareTo(tz) == 0) {
+                    if (first) {
+                        Log.e("SAME", last.toString());
+                        first = false;
+                    }
+                    Log.e("SAME", tz.toString());
+                } else {
+                    first = true;
+                }
+            }
+            last = tz;
+        }
+        Log.e(TAG, "Total number of tz's = " + mTimeZones.size());
     }
 
     private void populateDisplayNameOverrides(Resources resources) {
@@ -472,50 +481,4 @@ public class TimeZoneData {
         }
         return -1;
     }
-
-    private void printTz() {
-        for (TimeZoneInfo tz : mTimeZones) {
-            Log.e(TAG, "" + tz.toString());
-        }
-
-        Log.e(TAG, "Total number of tz's = " + mTimeZones.size());
-    }
-
-    // void checkForNameDups(TimeZone tz, String country, boolean dls, int
-    // style, int idx,
-    // boolean print) {
-    // if (country == null) {
-    // return;
-    // }
-    // String displayName = tz.getDisplayName(dls, style);
-    //
-    // if (print) {
-    // Log.e(TAG, "" + idx + " " + tz.getID() + " " + country + " ## " +
-    // displayName);
-    // }
-    //
-    // if (tz.useDaylightTime()) {
-    // if (displayName.matches("GMT[+-][0-9][0-9]:[0-9][0-9]")) {
-    // return;
-    // }
-    //
-    // if (displayName.length() == 3 && displayName.charAt(2) == 'T' &&
-    // (displayName.charAt(1) == 'S' || displayName.charAt(1) == 'D')) {
-    // displayName = "" + displayName.charAt(0) + 'T';
-    // } else {
-    // displayName = displayName.replace(" Daylight ",
-    // " ").replace(" Standard ", " ");
-    // }
-    // }
-    //
-    // String tzNameWithCountry = country + " ## " + displayName;
-    // Integer groupId = mCountryPlusTzName2Tzs.get(tzNameWithCountry);
-    // if (groupId == null) {
-    // mCountryPlusTzName2Tzs.put(tzNameWithCountry, idx);
-    // } else if (groupId != idx) {
-    // Log.e(TAG, "Yikes: " + tzNameWithCountry + " matches " + groupId +
-    // " and " + idx);
-    // }
-    // }
-
 }

@@ -124,4 +124,29 @@
         <item>"Brasilia - Pará"</item>
         </string-array>
 
+    <!--
+        Country codes
+        The order should match the entries in backup_country_names
+        ALWAYS ADD NEW ENTRIES AT THE END. Othewise the entries after the insertion point will
+        not match for languages that didn't get the translations.
+    -->
+    <string-array name="backup_country_codes" translatable="false">
+        <item>"SX"</item>
+        <item>"BQ"</item>
+        <item>"CW"</item>
+        <item>"SS"</item>
+    </string-array>
+
+    <!--
+        Display strings for country names. Used only if framework doesn't have translated
+        country names. The order should match the entries in backup_country_codes
+        ALWAYS ADD NEW ENTRIES AT THE END. Othewise the array will not be the same size until
+        all the translations are available. [CHAR LIMIT=32]
+    -->
+    <string-array name="backup_country_names">
+        <item>"Sint Maarten"</item>
+        <item>"Caribbean Netherlands"</item>
+        <item>"Curaçao"</item>
+        <item>"South Sudan"</item>
+    </string-array>
 </resources>

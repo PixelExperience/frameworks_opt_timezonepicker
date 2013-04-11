@@ -70,7 +70,13 @@
         <item>"Europe/Minsk"</item>
         <!-- Only had GMT as the display string -->
         <item>"Europe/Kaliningrad"</item>
-    </string-array>
+
+        <!-- Brazil -->
+        <!-- Non DST version -->
+        <item>"America/Porto_Velho"</item>
+        <!-- Non DST version -->
+        <item>"America/Belem"</item>
+</string-array>
 
     <!--
         Replacement display strings for time zones. The order should match the entries in
@@ -110,6 +116,12 @@
         <item>"Atlantic Standard Time"</item>
         <item>"Eastern European Time"</item>
         <item>"Kaliningrad Time"</item>
-    </string-array>
+
+        <!-- Brazil -->
+        <!-- Non DST version of Amazon Standard Time -->
+        <item>"Amazon - Rondônia"</item>
+        <!-- Non DST version of Brasilia Standard Time -->
+        <item>"Brasilia - Pará"</item>
+        </string-array>
 
 </resources>

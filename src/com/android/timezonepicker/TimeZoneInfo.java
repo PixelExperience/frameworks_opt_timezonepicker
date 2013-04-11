@@ -337,7 +337,11 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
         }
 
         // Finally diff by display name
+        if (mDisplayName != null && other.mDisplayName != null)
+            return this.mDisplayName.compareTo(other.mDisplayName);
+
         return this.mTz.getDisplayName(Locale.getDefault()).compareTo(
                 other.mTz.getDisplayName(Locale.getDefault()));
+
     }
 }

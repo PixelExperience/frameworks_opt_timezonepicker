@@ -17,8 +17,11 @@
 package com.android.timezonepicker;
 
 import android.content.Context;
+import android.text.Spannable;
+import android.text.Spannable.Factory;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -31,11 +34,13 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
+    private static final int DST_SYMBOL_COLOR = 0xFF606060;
     private static final char SEPARATOR = ',';
     private static final String TAG = null;
     public static int NUM_OF_TRANSITIONS = 6;
     public static long time = System.currentTimeMillis() / 1000;
     public static boolean is24HourFormat;
+    private static final Factory mSpannableFactory = Spannable.Factory.getInstance();
 
     TimeZone mTz;
     public String mTzId;
@@ -43,7 +48,6 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
     public int[] mTransitions; // may have trailing 0's.
     public String mCountry;
     public int groupId;
-    private boolean hasDst;
     public String mDisplayName;
     private Time recycledTime = new Time();
     private static StringBuilder mSB = new StringBuilder(50);
@@ -54,7 +58,6 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
         mTzId = tz.getID();
         mCountry = country;
         mRawoffset = tz.getRawOffset();
-        hasDst = tz.useDaylightTime();
 
         try {
             mTransitions = getTransitions(tz, time);
@@ -67,7 +70,8 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
     SparseArray<String> mLocalTimeCache = new SparseArray<String>();
     long mLocalTimeCacheReferenceTime = 0;
     static private long mGmtDisplayNameUpdateTime;
-    static private SparseArray<String> mGmtDisplayNameCache = new SparseArray<String>();
+    static private SparseArray<CharSequence> mGmtDisplayNameCache =
+            new SparseArray<CharSequence>();
 
     public String getLocalTime(long referenceTime) {
         recycledTime.timezone = TimeZone.getDefault().getID();
@@ -125,7 +129,7 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
      * mFormatter, per instance. If there are multiple callers for
      * getGmtDisplayName, the output may be mangled.
      */
-    public synchronized String getGmtDisplayName(Context context) {
+    public synchronized CharSequence getGmtDisplayName(Context context) {
         // TODO Note: The local time is shown in current time (current GMT
         // offset) which may be different from the time specified by
         // mTimeMillis
@@ -142,7 +146,7 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
             cacheKey = (int) (gmtOffset - 36 * DateUtils.HOUR_IN_MILLIS);
         }
 
-        String displayName = null;
+        CharSequence displayName = null;
         if (mGmtDisplayNameUpdateTime != nowMinute) {
             mGmtDisplayNameUpdateTime = nowMinute;
             mGmtDisplayNameCache.clear();
@@ -160,34 +164,22 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
 
             // mFormatter writes to mSB
             DateUtils.formatDateRange(context, mFormatter, now, now, flags, mTzId);
-            mSB.append(" (GMT");
-
-            if (gmtOffset < 0) {
-                mSB.append('-');
-            } else {
-                mSB.append('+');
-            }
-
-            final int p = Math.abs(gmtOffset);
-            mSB.append(p / DateUtils.HOUR_IN_MILLIS); // Hour
-
-            final int min = (p / 60000) % 60;
-            if (min != 0) { // Show minutes if non-zero
-                mSB.append(':');
-                if (min < 10) {
-                    mSB.append('0');
-                }
-                mSB.append(min);
-            }
-            mSB.append(')');
+            mSB.append(' ');
+            TimeZonePickerUtils.appendGmtOffset(mSB, gmtOffset);
 
             if (hasFutureDST) {
-                String dstSymbol = TimeZonePickerUtils.getDstSymbol();
-                mSB.append(" ");
-                mSB.append(dstSymbol); // Sun symbol
-            }
+                mSB.append(' ');
+                mSB.append(TimeZonePickerUtils.getDstSymbol()); // Sun symbol
 
-            displayName = mSB.toString();
+                final int end = mSB.length();
+                final int start = end - 1;
+                Spannable spannableText = mSpannableFactory.newSpannable(mSB);
+                spannableText.setSpan(new ForegroundColorSpan(DST_SYMBOL_COLOR), start, end,
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                displayName = spannableText;
+            } else {
+                displayName = mSB.toString();
+            }
             mGmtDisplayNameCache.put(cacheKey, displayName);
         }
         return displayName;

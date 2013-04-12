@@ -20,24 +20,6 @@
      [CHAR LIMIT=25] -->
     <string name="hint_time_zone_search">Country</string>
 
-    <!-- Label for a list of time zones searched by country name [CHAR LIMIT=30] -->
-    <string name="country">Country</string>
-
-    <!-- Label for a list of time zones searched by GMT Offset [CHAR LIMIT=30] -->
-    <string name="gmt_offset">GMT offset</string>
-
-    <!-- Label for a list of time zones searched by the hour of the local time [CHAR LIMIT=30] -->
-    <string name="local_time">Local time (hr)</string>
-
-    <!-- Label for a list of time zones in country [CHAR LIMIT=25] -->
-    <string name="results_country">"TIME ZONES IN <xliff:g id="country">%s</xliff:g>"</string>
-
-    <!-- Label for a list of time zones with a certain GMT offset [CHAR LIMIT=25] -->
-    <string name="results_gmt">"TIME ZONES IN GMT <xliff:g id="offset">%s</xliff:g>"</string>
-
-    <!-- Label for a list of time zones in a certain hour of the day [CHAR LIMIT=25] -->
-    <string name="results_local_type">"TIME ZONES AT <xliff:g id="local_time">%s</xliff:g>"</string>
-
     <!-- Description of clear icon in the search bar, for accessibility. [CHAR LIMIT=NONE]-->
     <string name="searchview_description_clear">Clear query</string>
 </resources>

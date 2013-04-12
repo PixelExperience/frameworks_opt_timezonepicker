@@ -32,6 +32,7 @@ import com.android.timezonepicker.TimeZoneFilterTypeAdapter.OnSetFilterListener;
 import com.android.timezonepicker.TimeZonePickerView.OnTimeZoneSetListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickListener,
@@ -192,8 +193,13 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
                 }
             }
 
+            Iterator<String> it = recents.iterator();
             while (recents.size() >= MAX_RECENT_TIMEZONES) {
-                recents.remove(0);
+                if (!it.hasNext()) {
+                    break;
+                }
+                it.next();
+                it.remove();
             }
             recents.add(id);
 

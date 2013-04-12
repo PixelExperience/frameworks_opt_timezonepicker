@@ -39,5 +39,13 @@
     <item msgid="6758957851822881177">"Atlantic Standard Time"</item>
     <item msgid="2477556470536619081">"Eastern European Time"</item>
     <item msgid="7328461310893621937">"Kaliningrad Time"</item>
+    <item msgid="4212642599758736931">"Amazon - Rondônia"</item>
+    <item msgid="2370319280810537375">"Brasilia - Pará"</item>
+  </string-array>
+  <string-array name="backup_country_names">
+    <item msgid="9141777876082196578">"Sint Maarten"</item>
+    <item msgid="5330962017221568054">"Caribbean Netherlands"</item>
+    <item msgid="1465164631761814300">"Curaçao"</item>
+    <item msgid="8972081011408691260">"South Sudan"</item>
   </string-array>
 </resources>

@@ -49,12 +49,10 @@ public class TimeZonePickerDialog extends DialogFragment implements
             Bundle savedInstanceState) {
         long timeMillis = 0;
         String timeZone = null;
-        if (savedInstanceState == null) {
-            Bundle b = getArguments();
-            if (b != null) {
-                timeMillis = b.getLong(BUNDLE_START_TIME_MILLIS);
-                timeZone = b.getString(BUNDLE_TIME_ZONE);
-            }
+        Bundle b = getArguments();
+        if (b != null) {
+            timeMillis = b.getLong(BUNDLE_START_TIME_MILLIS);
+            timeZone = b.getString(BUNDLE_TIME_ZONE);
         }
         return new TimeZonePickerView(getActivity(), null, timeZone, timeMillis, this);
     }

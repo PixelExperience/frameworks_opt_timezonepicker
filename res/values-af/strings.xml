@@ -26,10 +26,11 @@
     <string name="country" msgid="4435526943498223723">"Land"</string>
     <string name="time_zone" msgid="7596741004923832245">"Tydsones"</string>
     <string name="gmt_offset" msgid="1423212735204762062">"GMT-skikking"</string>
-    <string name="local_time" msgid="6767659693881978111">"Plaaslike tyd (hr)"</string>
+    <string name="local_time" msgid="6767659693881978111">"Plaaslike tyd (uur)"</string>
     <string name="results_country" msgid="8042876404471058354">"TYDSONES IN <xliff:g id="COUNTRY">%s</xliff:g>"</string>
-    <string name="results_gmt" msgid="150119647642882676">"TYDSONES IN GMT-<xliff:g id="OFFSET">%s</xliff:g>"</string>
+    <string name="results_gmt" msgid="150119647642882676">"TYDSONES IN GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"TYDSONES BY <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
-    <string name="dst_note" msgid="7960397878968451833">"☀ Kom dagligbesparingtyd na"</string>
+    <!-- no translation found for dst_note (7724565327065099451) -->
+    <skip />
     <string name="searchview_description_clear" msgid="1603860069305867810">"Vee navraag uit"</string>
 </resources>

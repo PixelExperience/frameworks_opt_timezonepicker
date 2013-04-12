@@ -30,6 +30,6 @@
     <string name="results_country" msgid="8042876404471058354">"TIME ZONES IN <xliff:g id="COUNTRY">%s</xliff:g>"</string>
     <string name="results_gmt" msgid="150119647642882676">"TIME ZONES IN GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"TIME ZONES AT <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
-    <string name="dst_note" msgid="7960397878968451833">"☀ Observes daylight saving time"</string>
+    <string name="dst_note" msgid="7724565327065099451">"* Observes daylight saving time"</string>
     <string name="searchview_description_clear" msgid="1603860069305867810">"Clear query"</string>
 </resources>

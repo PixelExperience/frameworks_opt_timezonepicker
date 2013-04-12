@@ -30,6 +30,7 @@
     <string name="results_country" msgid="8042876404471058354">"FUSI ORARI IN <xliff:g id="COUNTRY">%s</xliff:g>"</string>
     <string name="results_gmt" msgid="150119647642882676">"FUSI ORARI IN GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"FUSI ORARI CORRISPONDENTI PER LE ORE <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
-    <string name="dst_note" msgid="7960397878968451833">"☀ Osserva l\'ora legale"</string>
+    <!-- no translation found for dst_note (7724565327065099451) -->
+    <skip />
     <string name="searchview_description_clear" msgid="1603860069305867810">"Cancella query"</string>
 </resources>

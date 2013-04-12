@@ -262,11 +262,6 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                             || (lowerCaseCountry.charAt(0) == prefixString.charAt(0) &&
                             isStartingInitialsFor(prefixString, lowerCaseCountry))) {
                         FilterTypeResult r;
-                        if (first) {
-                            r = new FilterTypeResult(true, FILTER_TYPE_COUNTRY, null, 0);
-                            filtered.add(r);
-                            first = false;
-                        }
                         r = new FilterTypeResult(false, FILTER_TYPE_COUNTRY, country, 0);
                         filtered.add(r);
                     }

@@ -36,10 +36,9 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
     public static final int FILTER_TYPE_EMPTY = -1;
     public static final int FILTER_TYPE_NONE = 0;
     public static final int FILTER_TYPE_TIME = 1;
-    public static final int FILTER_TYPE_TIME_ZONE = 2;
-    public static final int FILTER_TYPE_COUNTRY = 3;
-    public static final int FILTER_TYPE_STATE = 4;
-    public static final int FILTER_TYPE_GMT = 5;
+    public static final int FILTER_TYPE_COUNTRY = 2;
+    public static final int FILTER_TYPE_STATE = 3;
+    public static final int FILTER_TYPE_GMT = 4;
 
     public interface OnSetFilterListener {
         void onSetFilter(int filterType, String str, int time);
@@ -152,9 +151,6 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                     break;
                 case FILTER_TYPE_TIME:
                     resId = R.string.local_time;
-                    break;
-                case FILTER_TYPE_TIME_ZONE:
-                    resId = R.string.time_zone;
                     break;
                 case FILTER_TYPE_COUNTRY:
                     resId = R.string.country;

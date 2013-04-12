@@ -20,21 +20,8 @@
      [CHAR LIMIT=25] -->
     <string name="hint_time_zone_search">Country</string>
 
-    <!-- Label for the currently selected time zone [CHAR LIMIT=30] -->
-    <string name="current_time_zone">CURRENT TIME ZONE</string>
-
-    <!-- Label for the recently selected time zones [CHAR LIMIT=30] -->
-    <plurals name="recent_time_zone">
-        <item quantity="one">RECENT TIME ZONE</item>
-        <!-- This is the label for 2 or more time zones. -->
-        <item quantity="other">RECENT TIME ZONES</item>
-    </plurals>
-
     <!-- Label for a list of time zones searched by country name [CHAR LIMIT=30] -->
     <string name="country">Country</string>
-
-    <!-- Label for a list of time zones searched by time zone name [CHAR LIMIT=30] -->
-    <string name="time_zone">Time zones</string>
 
     <!-- Label for a list of time zones searched by GMT Offset [CHAR LIMIT=30] -->
     <string name="gmt_offset">GMT offset</string>
@@ -50,10 +37,6 @@
 
     <!-- Label for a list of time zones in a certain hour of the day [CHAR LIMIT=25] -->
     <string name="results_local_type">"TIME ZONES AT <xliff:g id="local_time">%s</xliff:g>"</string>
-
-    <!-- Legend for the * symbol to mean that the time zone has
-     a future day light savings time [CHAR LIMIT=30] -->
-    <string name="dst_note">\u002A Observes daylight saving time</string>
 
     <!-- Description of clear icon in the search bar, for accessibility. [CHAR LIMIT=NONE]-->
     <string name="searchview_description_clear">Clear query</string>

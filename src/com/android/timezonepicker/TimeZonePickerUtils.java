@@ -75,9 +75,23 @@ public class TimeZonePickerUtils {
         time.set(timeMillis);
 
         StringBuilder sb = new StringBuilder();
+        final int gmtOffset = tz.getOffset(timeMillis);
+        appendGmtOffset(sb, gmtOffset);
+
+        String displayName = getDisplayName(tz, time.isDst != 0);
+        sb.append(" ");
+        sb.append(displayName);
+
+        if (tz.useDaylightTime()) {
+            sb.append(" ");
+            sb.append(getDstSymbol()); // Sun symbol
+        }
+        return sb.toString();
+    }
+
+    public static void appendGmtOffset(StringBuilder sb, final int gmtOffset) {
         sb.append("(GMT");
 
-        final int gmtOffset = tz.getOffset(timeMillis);
         if (gmtOffset < 0) {
             sb.append('-');
         } else {
@@ -95,24 +109,14 @@ public class TimeZonePickerUtils {
             }
             sb.append(min);
         }
-        sb.append(") ");
-
-        String displayName = getDisplayName(tz, time.isDst != 0);
-        sb.append(displayName);
-
-        if (tz.useDaylightTime()) {
-            String dstSymbol = getDstSymbol();
-            sb.append(" ");
-            sb.append(dstSymbol); // Sun symbol
-        }
-        return sb.toString();
+        sb.append(')');
     }
 
-    public static String getDstSymbol() {
+    public static char getDstSymbol() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            return "\u2600"; // The Sun emoji icon.
+            return '\u2600'; // The Sun emoji icon.
         } else {
-            return "*";
+            return '*';
         }
     }
 

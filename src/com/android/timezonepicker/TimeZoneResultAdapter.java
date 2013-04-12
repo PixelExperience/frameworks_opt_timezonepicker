@@ -32,9 +32,7 @@ import com.android.timezonepicker.TimeZoneFilterTypeAdapter.OnSetFilterListener;
 import com.android.timezonepicker.TimeZonePickerView.OnTimeZoneSetListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickListener,
         OnSetFilterListener {
@@ -54,21 +52,16 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
     /** The maximum number of recent timezones to save */
     private static final int MAX_RECENT_TIMEZONES = 3;
 
-    private static final int RESULT_LABEL_RECENT = -100;
-    private static final int RESULT_LABEL_CURRENT = -200;
-
     static class ViewHolder {
         TextView timeZone;
         TextView timeOffset;
         TextView location;
-        TextView label;
 
         static void setupViewHolder(View v) {
             ViewHolder vh = new ViewHolder();
             vh.timeZone = (TextView) v.findViewById(R.id.time_zone);
             vh.timeOffset = (TextView) v.findViewById(R.id.time_offset);
             vh.location = (TextView) v.findViewById(R.id.location);
-            vh.label = (TextView) v.findViewById(R.id.label);
             v.setTag(vh);
         }
     }
@@ -81,7 +74,6 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
 
     private int[] mFilteredTimeZoneIndices;
     private int mFilteredTimeZoneLength = 0;
-    private int mFilterType;
 
     public TimeZoneResultAdapter(Context context, TimeZoneData tzd,
             com.android.timezonepicker.TimeZonePickerView.OnTimeZoneSetListener l) {
@@ -103,7 +95,6 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
     public void onSetFilter(int filterType, String str, int time) {
         Log.d(TAG, "onSetFilter: " + filterType + " [" + str + "] " + time);
 
-        mFilterType = filterType;
         mFilteredTimeZoneLength = 0;
         int idx = 0;
 
@@ -114,7 +105,6 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
                 // Show the default/current value first
                 int defaultTzIndex = mTimeZoneData.getDefaultTimeZoneIndex();
                 if (defaultTzIndex != -1) {
-                    mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = RESULT_LABEL_CURRENT;
                     mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = defaultTzIndex;
                 }
 
@@ -124,17 +114,11 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
                 String recentsString = prefs.getString(KEY_RECENT_TIMEZONES, null);
                 if (!TextUtils.isEmpty(recentsString)) {
                     String[] recents = recentsString.split(RECENT_TIMEZONES_DELIMITER);
-                    boolean first = true;
                     for (int i = recents.length - 1; i >= 0; i--) {
                         if (!TextUtils.isEmpty(recents[i])
                                 && !recents[i].equals(mTimeZoneData.mDefaultTimeZoneId)) {
                             int index = mTimeZoneData.findIndexByTimeZoneIdSlow(recents[i]);
                             if (index != -1) {
-                                if (first) {
-                                    mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] =
-                                            RESULT_LABEL_RECENT;
-                                    first = false;
-                                }
                                 mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = index;
                             }
                         }
@@ -166,16 +150,6 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
                         mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = idx;
                     }
                     idx++;
-                }
-                break;
-            case TimeZoneFilterTypeAdapter.FILTER_TYPE_TIME_ZONE:
-                if (str != null) {
-                    for (TimeZoneInfo tzi : mTimeZoneData.mTimeZones) {
-                        if (str.equalsIgnoreCase(tzi.mDisplayName)) {
-                            mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = idx;
-                        }
-                        idx++;
-                    }
                 }
                 break;
             case TimeZoneFilterTypeAdapter.FILTER_TYPE_COUNTRY:
@@ -210,13 +184,11 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
         if (recentsString == null) {
             recentsString = id;
         } else {
-            List<String> recents = new ArrayList<String>(
-                    Arrays.asList(recentsString.split(RECENT_TIMEZONES_DELIMITER)));
-            Iterator<String> it = recents.iterator();
-            while (it.hasNext()) {
-                String tz = it.next();
-                if (id.equals(tz)) {
-                    it.remove();
+            // De-dup
+            LinkedHashSet<String> recents = new LinkedHashSet<String>();
+            for(String tzId : recentsString.split(RECENT_TIMEZONES_DELIMITER)) {
+                if (!recents.contains(tzId) && !id.equals(tzId)) {
+                    recents.add(tzId);
                 }
             }
 
@@ -252,13 +224,6 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
             return null;
         }
 
-        switch (mFilteredTimeZoneIndices[position]) {
-            case RESULT_LABEL_CURRENT:
-                return "CURRENT TIME ZONE";
-            case RESULT_LABEL_RECENT:
-                return "RECENT TIME ZONE";
-        }
-
         return mTimeZoneData.get(mFilteredTimeZoneIndices[position]);
     }
 
@@ -288,36 +253,19 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
 
         ViewHolder vh = (ViewHolder) v.getTag();
 
-        if (mFilteredTimeZoneIndices[position] >= 0) {
-            TimeZoneInfo tzi = mTimeZoneData.get(mFilteredTimeZoneIndices[position]);
-            v.setTag(VIEW_TAG_TIME_ZONE, tzi);
+        TimeZoneInfo tzi = mTimeZoneData.get(mFilteredTimeZoneIndices[position]);
+        v.setTag(VIEW_TAG_TIME_ZONE, tzi);
 
-            vh.label.setVisibility(View.GONE);
-            vh.timeZone.setText(tzi.mDisplayName);
-            vh.timeZone.setVisibility(View.VISIBLE);
+        vh.timeZone.setText(tzi.mDisplayName);
 
-            vh.timeOffset.setText(tzi.getGmtDisplayName(mContext));
-            vh.timeOffset.setVisibility(View.VISIBLE);
+        vh.timeOffset.setText(tzi.getGmtDisplayName(mContext));
 
-            String location = tzi.mCountry;
-            if (location == null) {
-                vh.location.setVisibility(View.INVISIBLE);
-            } else {
-                vh.location.setText(location);
-                vh.location.setVisibility(View.VISIBLE);
-            }
+        String location = tzi.mCountry;
+        if (location == null) {
+            vh.location.setVisibility(View.INVISIBLE);
         } else {
-            if (mFilteredTimeZoneIndices[position] == RESULT_LABEL_CURRENT) {
-                vh.label.setText(v.getResources().getText(R.string.current_time_zone));
-            } else if (mFilteredTimeZoneIndices[position] == RESULT_LABEL_RECENT) {
-                vh.label.setText(v.getResources().getQuantityText(R.plurals.recent_time_zone,
-                        /* num of recent tzs */ mFilteredTimeZoneLength - position - 1));
-            }
-            vh.label.setVisibility(View.VISIBLE);
-            vh.timeZone.setVisibility(View.GONE);
-            vh.timeOffset.setVisibility(View.GONE);
-            vh.location.setVisibility(View.GONE);
-            v.setTag(VIEW_TAG_TIME_ZONE, null);
+            vh.location.setText(location);
+            vh.location.setVisibility(View.VISIBLE);
         }
 
         return v;

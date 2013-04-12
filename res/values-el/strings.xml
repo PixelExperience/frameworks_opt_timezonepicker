@@ -30,6 +30,7 @@
     <string name="results_country" msgid="8042876404471058354">"ΖΩΝΕΣ ΩΡΑΣ ΣΕ <xliff:g id="COUNTRY">%s</xliff:g>"</string>
     <string name="results_gmt" msgid="150119647642882676">"ΖΩΝΕΣ ΩΡΑΣ ΣΕ GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"ΖΩΝΕΣ ΩΡΑΣ ΣΕ <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
-    <string name="dst_note" msgid="7960397878968451833">"☀ Τηρεί τη θερινή ώρα"</string>
+    <!-- no translation found for dst_note (7724565327065099451) -->
+    <skip />
     <string name="searchview_description_clear" msgid="1603860069305867810">"Διαγραφή ερωτήματος"</string>
 </resources>

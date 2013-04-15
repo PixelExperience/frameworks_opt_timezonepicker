@@ -135,24 +135,6 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
                     }
                 }
                 break;
-            case TimeZoneFilterTypeAdapter.FILTER_TYPE_TIME:
-                // TODO make this faster
-                long now = System.currentTimeMillis();
-                for (TimeZoneInfo tzi : mTimeZoneData.mTimeZones) {
-                    int localHr = tzi.getLocalHr(now);
-                    boolean match = localHr == time;
-                    if (!match && !TimeZoneData.is24HourFormat) {
-                        // PM + noon cases
-                        if ((time + 12 == localHr) || (time == 12 && localHr == 0)) {
-                            match = true;
-                        }
-                    }
-                    if (match) {
-                        mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = idx;
-                    }
-                    idx++;
-                }
-                break;
             case TimeZoneFilterTypeAdapter.FILTER_TYPE_COUNTRY:
                 ArrayList<Integer> tzIds = mTimeZoneData.mTimeZonesByCountry.get(str);
                 if (tzIds != null) {

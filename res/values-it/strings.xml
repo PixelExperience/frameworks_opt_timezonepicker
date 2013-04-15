@@ -18,19 +18,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="hint_time_zone_search" msgid="5383328007067667343">"Paese"</string>
-    <string name="current_time_zone" msgid="5603376793234386934">"FUSO ORARIO ATTUALE"</string>
-  <plurals name="recent_time_zone">
-    <item quantity="one" msgid="3160399884299421609">"FUSO ORARIO RECENTE"</item>
-    <item quantity="other" msgid="977876440715483041">"FUSI ORARI RECENTI"</item>
-  </plurals>
     <string name="country" msgid="4435526943498223723">"Paese"</string>
-    <string name="time_zone" msgid="7596741004923832245">"Fusi orari"</string>
     <string name="gmt_offset" msgid="1423212735204762062">"Differenza con fuso orario GMT"</string>
     <string name="local_time" msgid="6767659693881978111">"Ora locale (h)"</string>
     <string name="results_country" msgid="8042876404471058354">"FUSI ORARI IN <xliff:g id="COUNTRY">%s</xliff:g>"</string>
     <string name="results_gmt" msgid="150119647642882676">"FUSI ORARI IN GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"FUSI ORARI CORRISPONDENTI PER LE ORE <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
-    <!-- no translation found for dst_note (7724565327065099451) -->
-    <skip />
     <string name="searchview_description_clear" msgid="1603860069305867810">"Cancella query"</string>
 </resources>

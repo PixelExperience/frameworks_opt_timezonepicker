@@ -18,19 +18,11 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="hint_time_zone_search" msgid="5383328007067667343">"Land"</string>
-    <string name="current_time_zone" msgid="5603376793234386934">"NUVARANDE TIDSZON"</string>
-  <plurals name="recent_time_zone">
-    <item quantity="one" msgid="3160399884299421609">"SENASTE TIDSZONEN"</item>
-    <item quantity="other" msgid="977876440715483041">"SENASTE TIDSZONERNA"</item>
-  </plurals>
     <string name="country" msgid="4435526943498223723">"Land"</string>
-    <string name="time_zone" msgid="7596741004923832245">"Tidszoner"</string>
     <string name="gmt_offset" msgid="1423212735204762062">"Tidsskillnad mot GMT"</string>
     <string name="local_time" msgid="6767659693881978111">"Lokal tid (tim)"</string>
     <string name="results_country" msgid="8042876404471058354">"TIDSZONER I <xliff:g id="COUNTRY">%s</xliff:g>"</string>
     <string name="results_gmt" msgid="150119647642882676">"TIDSZONER I GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
     <string name="results_local_type" msgid="7740791760342005442">"TIDSZONER – <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
-    <!-- no translation found for dst_note (7724565327065099451) -->
-    <skip />
     <string name="searchview_description_clear" msgid="1603860069305867810">"Ta bort frågan"</string>
 </resources>

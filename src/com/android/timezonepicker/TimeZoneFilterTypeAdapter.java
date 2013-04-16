@@ -209,9 +209,22 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                 // TODO Perf - cache toLowerCase()?
                 if (!TextUtils.isEmpty(country)) {
                     final String lowerCaseCountry = country.toLowerCase();
+                    boolean isMatch = false;
                     if (lowerCaseCountry.startsWith(prefixString)
                             || (lowerCaseCountry.charAt(0) == prefixString.charAt(0) &&
                             isStartingInitialsFor(prefixString, lowerCaseCountry))) {
+                        isMatch = true;
+                    } else if (lowerCaseCountry.contains(" ")){
+                        // We should also search other words in the country name, so that
+                        // searches like "Korea" yield "South Korea".
+                        for (String word : lowerCaseCountry.split(" ")) {
+                            if (word.startsWith(prefixString)) {
+                                isMatch = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isMatch) {
                         filtered.add(new FilterTypeResult(FILTER_TYPE_COUNTRY, country, 0));
                     }
                 }

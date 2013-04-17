@@ -18,11 +18,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="hint_time_zone_search" msgid="5383328007067667343">"Țară"</string>
-    <string name="country" msgid="4435526943498223723">"Țară"</string>
-    <string name="gmt_offset" msgid="1423212735204762062">"Decalaj GMT"</string>
-    <string name="local_time" msgid="6767659693881978111">"Ora locală (h)"</string>
-    <string name="results_country" msgid="8042876404471058354">"FUSURI ORARE DIN <xliff:g id="COUNTRY">%s</xliff:g>"</string>
-    <string name="results_gmt" msgid="150119647642882676">"FUSURI ORARE CU <xliff:g id="OFFSET">%s</xliff:g> GMT"</string>
-    <string name="results_local_type" msgid="7740791760342005442">"FUSURI ORARE LA <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
     <string name="searchview_description_clear" msgid="1603860069305867810">"Ștergeți interogarea"</string>
 </resources>

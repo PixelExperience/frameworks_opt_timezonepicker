@@ -33,6 +33,8 @@ import java.util.ArrayList;
 public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable, OnClickListener {
     public static final String TAG = "TimeZoneFilterTypeAdapter";
 
+    private static final boolean DEBUG = false;
+
     public static final int FILTER_TYPE_EMPTY = -1;
     public static final int FILTER_TYPE_NONE = 0;
     public static final int FILTER_TYPE_COUNTRY = 1;
@@ -163,7 +165,9 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
     private class ArrayFilter extends Filter {
         @Override
         protected FilterResults performFiltering(CharSequence prefix) {
-            Log.e(TAG, "performFiltering >>>> [" + prefix + "]");
+            if (DEBUG) {
+                Log.d(TAG, "performFiltering >>>> [" + prefix + "]");
+            }
 
             FilterResults results = new FilterResults();
             String prefixString = null;
@@ -233,7 +237,9 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
             // ////////////////////////////////////////
             // TODO Search by state
             // ////////////////////////////////////////
-            Log.e(TAG, "performFiltering <<<< " + filtered.size() + "[" + prefix + "]");
+            if (DEBUG) {
+                Log.d(TAG, "performFiltering <<<< " + filtered.size() + "[" + prefix + "]");
+            }
 
             results.values = filtered;
             results.count = filtered.size();
@@ -369,7 +375,9 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                 return Integer.MIN_VALUE;
             }
 
-            Log.e(TAG, "Parsing " + str + " -> " + negativeMultiplier * num);
+            if (DEBUG) {
+                Log.d(TAG, "Parsing " + str + " -> " + negativeMultiplier * num);
+            }
             return negativeMultiplier * num;
         }
 
@@ -387,11 +395,15 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                     }
                     mListener.onSetFilter(filterType, null, 0);
                 }
-                Log.e(TAG, "publishResults: " + results.count + " of null [" + constraint);
+                if (DEBUG) {
+                    Log.d(TAG, "publishResults: " + results.count + " of null [" + constraint);
+                }
             } else {
                 mLiveResults = (ArrayList<FilterTypeResult>) results.values;
-                Log.e(TAG, "publishResults: " + results.count + " of " + mLiveResults.size() + " ["
-                        + constraint);
+                if (DEBUG) {
+                    Log.d(TAG, "publishResults: " + results.count + " of " + mLiveResults.size()
+                            + " [" + constraint);
+                }
             }
             mLiveResultsCount = results.count;
 

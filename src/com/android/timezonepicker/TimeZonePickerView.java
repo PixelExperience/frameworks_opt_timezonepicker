@@ -26,6 +26,7 @@ import android.text.style.ImageSpan;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
@@ -33,12 +34,15 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
-public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnItemClickListener {
+public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnItemClickListener,
+    OnClickListener {
     private static final String TAG = "TimeZonePickerView";
 
     private Context mContext;
     private AutoCompleteTextView mAutoCompleteTextView;
     private TimeZoneFilterTypeAdapter mFilterAdapter;
+    private boolean mHideFilterSearchOnStart = false;
+    private boolean mFirstTime = true;
     TimeZoneResultAdapter mResultAdapter;
 
     private ImageButton mClearButton;
@@ -48,12 +52,15 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
     }
 
     public TimeZonePickerView(Context context, AttributeSet attrs,
-            String timeZone, long timeMillis, OnTimeZoneSetListener l) {
+            String timeZone, long timeMillis, OnTimeZoneSetListener l,
+            boolean hideFilterSearch) {
         super(context, attrs);
         mContext = context;
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.timezonepickerview, this, true);
+
+        mHideFilterSearchOnStart = hideFilterSearch;
 
         TimeZoneData tzd = new TimeZoneData(mContext, timeZone, timeMillis);
 
@@ -62,11 +69,12 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
         timeZoneList.setAdapter(mResultAdapter);
         timeZoneList.setOnItemClickListener(mResultAdapter);
 
-        mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.searchBox);
         mFilterAdapter = new TimeZoneFilterTypeAdapter(mContext, tzd, mResultAdapter);
-        mAutoCompleteTextView.setAdapter(mFilterAdapter);
+
+        mAutoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.searchBox);
         mAutoCompleteTextView.addTextChangedListener(this);
         mAutoCompleteTextView.setOnItemClickListener(this);
+        mAutoCompleteTextView.setOnClickListener(this);
 
         updateHint(R.string.hint_time_zone_search, R.drawable.ic_search_holo_light);
         mClearButton = (ImageButton) findViewById(R.id.clear_search);
@@ -76,6 +84,32 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
                 mAutoCompleteTextView.getEditableText().clear();
             }
         });
+    }
+
+    public void showFilterResults(int type, String string, int time) {
+        if (mResultAdapter != null) {
+            mResultAdapter.onSetFilter(type, string, time);
+        }
+    }
+
+    public boolean hasResults() {
+        return mResultAdapter != null && mResultAdapter.hasResults();
+    }
+
+    public int getLastFilterType() {
+        return mResultAdapter != null ? mResultAdapter.getLastFilterType() : -1;
+    }
+
+    public String getLastFilterString() {
+        return mResultAdapter != null ? mResultAdapter.getLastFilterString() : null;
+    }
+
+    public int getLastFilterTime() {
+        return mResultAdapter != null ? mResultAdapter.getLastFilterType() : -1;
+    }
+
+    public boolean getHideFilterSearchOnStart() {
+        return mHideFilterSearchOnStart;
     }
 
     private void updateHint(int hintTextId, int imageDrawableId) {
@@ -98,7 +132,11 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
     // Implementation of TextWatcher
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        mFilterAdapter.getFilter().filter(s.toString());
+        if (mFirstTime && mHideFilterSearchOnStart) {
+            mFirstTime = false;
+            return;
+        }
+        filterOnString(s.toString());
     }
 
     // Implementation of TextWatcher
@@ -113,6 +151,25 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // An onClickListener for the view item because I haven't figured out a
         // way to update the AutoCompleteTextView without causing an infinite loop.
+        mHideFilterSearchOnStart = true;
         mFilterAdapter.onClick(view);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mAutoCompleteTextView != null && !mAutoCompleteTextView.isPopupShowing()) {
+            filterOnString(mAutoCompleteTextView.getText().toString());
+        }
+    }
+
+    // This method will set the adapter if no adapter has been set.  The adapter is initialized
+    // here to prevent the drop-down from appearing uninvited on orientation change, as the
+    // AutoCompleteTextView.setText() will trigger the drop-down if the adapter has been set.
+    private void filterOnString(String string) {
+        if (mAutoCompleteTextView.getAdapter() == null) {
+            mAutoCompleteTextView.setAdapter(mFilterAdapter);
+        }
+        mHideFilterSearchOnStart = false;
+        mFilterAdapter.getFilter().filter(string);
     }
 }

@@ -38,11 +38,18 @@ import java.util.LinkedHashSet;
 public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickListener,
         OnSetFilterListener {
     private static final String TAG = "TimeZoneResultAdapter";
+    private static final boolean DEBUG = false;
     private static final int VIEW_TAG_TIME_ZONE = R.id.time_zone;
 
     /** SharedPref name and key for recent time zones */
     private static final String SHARED_PREFS_NAME = "com.android.calendar_preferences";
     private static final String KEY_RECENT_TIMEZONES = "preferences_recent_timezones";
+
+    private int mLastFilterType;
+    private String mLastFilterString;
+    private int mLastFilterTime;
+
+    private boolean mHasResults = false;
 
     /**
      * The delimiter we use when serializing recent timezones to shared
@@ -91,10 +98,32 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
         onSetFilter(TimeZoneFilterTypeAdapter.FILTER_TYPE_NONE, null, 0);
     }
 
+    public boolean hasResults() {
+        return mHasResults;
+    }
+
+    public int getLastFilterType() {
+        return mLastFilterType;
+    }
+
+    public String getLastFilterString() {
+        return mLastFilterString;
+    }
+
+    public int getLastFilterTime() {
+        return mLastFilterTime;
+    }
+
     // Implements OnSetFilterListener
     @Override
     public void onSetFilter(int filterType, String str, int time) {
-        Log.d(TAG, "onSetFilter: " + filterType + " [" + str + "] " + time);
+        if (DEBUG) {
+            Log.d(TAG, "onSetFilter: " + filterType + " [" + str + "] " + time);
+        }
+
+        mLastFilterType = filterType;
+        mLastFilterString = str;
+        mLastFilterTime = time;
 
         mFilteredTimeZoneLength = 0;
         int idx = 0;
@@ -149,6 +178,8 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
             default:
                 throw new IllegalArgumentException();
         }
+        mHasResults = mFilteredTimeZoneLength > 0;
+
         notifyDataSetChanged();
     }
 

@@ -18,11 +18,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="hint_time_zone_search" msgid="5383328007067667343">"Χώρα"</string>
-    <string name="country" msgid="4435526943498223723">"Χώρα"</string>
-    <string name="gmt_offset" msgid="1423212735204762062">"Μετατόπιση GMT"</string>
-    <string name="local_time" msgid="6767659693881978111">"Τοπική ώρα (hr)"</string>
-    <string name="results_country" msgid="8042876404471058354">"ΖΩΝΕΣ ΩΡΑΣ ΣΕ <xliff:g id="COUNTRY">%s</xliff:g>"</string>
-    <string name="results_gmt" msgid="150119647642882676">"ΖΩΝΕΣ ΩΡΑΣ ΣΕ GMT <xliff:g id="OFFSET">%s</xliff:g>"</string>
-    <string name="results_local_type" msgid="7740791760342005442">"ΖΩΝΕΣ ΩΡΑΣ ΣΕ <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
     <string name="searchview_description_clear" msgid="1603860069305867810">"Διαγραφή ερωτήματος"</string>
 </resources>

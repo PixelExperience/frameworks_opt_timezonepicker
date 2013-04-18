@@ -303,7 +303,7 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
     @Override
     public int compareTo(TimeZoneInfo other) {
         if (this.getNowOffsetMillis() != other.getNowOffsetMillis()) {
-            return other.getNowOffsetMillis() - this.getNowOffsetMillis();
+            return (other.getNowOffsetMillis() < this.getNowOffsetMillis()) ? -1 : 1;
         }
 
         // By country

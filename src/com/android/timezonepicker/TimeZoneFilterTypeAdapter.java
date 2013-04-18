@@ -29,6 +29,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable, OnClickListener {
     public static final String TAG = "TimeZoneFilterTypeAdapter";
@@ -209,6 +210,7 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
             // ////////////////////////////////////////
             // Search by country
             // ////////////////////////////////////////
+            ArrayList<String> countries = new ArrayList<String>();
             for (String country : mTimeZoneData.mTimeZonesByCountry.keySet()) {
                 // TODO Perf - cache toLowerCase()?
                 if (!TextUtils.isEmpty(country)) {
@@ -229,8 +231,15 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                         }
                     }
                     if (isMatch) {
-                        filtered.add(new FilterTypeResult(FILTER_TYPE_COUNTRY, country, 0));
+                        countries.add(country);
                     }
+                }
+            }
+            if (countries.size() > 0) {
+                // Sort countries alphabetically.
+                Collections.sort(countries);
+                for (String country : countries) {
+                    filtered.add(new FilterTypeResult(FILTER_TYPE_COUNTRY, country, 0));
                 }
             }
 

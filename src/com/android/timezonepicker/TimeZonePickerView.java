@@ -27,6 +27,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
@@ -149,6 +150,10 @@ public class TimeZonePickerView extends LinearLayout implements TextWatcher, OnI
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // Hide the keyboard since the user explicitly selected an item.
+        InputMethodManager manager =
+                (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        manager.hideSoftInputFromWindow(mAutoCompleteTextView.getWindowToken(), 0);
         // An onClickListener for the view item because I haven't figured out a
         // way to update the AutoCompleteTextView without causing an infinite loop.
         mHideFilterSearchOnStart = true;

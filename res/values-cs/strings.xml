@@ -18,11 +18,5 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="hint_time_zone_search" msgid="5383328007067667343">"Země"</string>
-    <string name="country" msgid="4435526943498223723">"Země"</string>
-    <string name="gmt_offset" msgid="1423212735204762062">"Časový posun od pásma GMT"</string>
-    <string name="local_time" msgid="6767659693881978111">"Místní čas (h)"</string>
-    <string name="results_country" msgid="8042876404471058354">"ČASOVÁ PÁSMA V ZEMI <xliff:g id="COUNTRY">%s</xliff:g>"</string>
-    <string name="results_gmt" msgid="150119647642882676">"ČASOVÁ PÁSMA S POSUNEM <xliff:g id="OFFSET">%s</xliff:g> OD GMT"</string>
-    <string name="results_local_type" msgid="7740791760342005442">"ČASOVÁ PÁSMA V <xliff:g id="LOCAL_TIME">%s</xliff:g>"</string>
     <string name="searchview_description_clear" msgid="1603860069305867810">"Smazat dotaz"</string>
 </resources>

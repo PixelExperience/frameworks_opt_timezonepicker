@@ -262,9 +262,9 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
          * and symbols).
          *
          * For example:
-         * isStartingInitialsFor("UA", "United Arb Emirates") would return true
+         * isStartingInitialsFor("UA", "United Arab Emirates") would return true
          * isStartingInitialsFor("US", "U.S. Virgin Island") would return true
-
+         *
          * @param prefixString
          * @param string
          * @return
@@ -290,6 +290,11 @@ public class TimeZoneFilterTypeAdapter extends BaseAdapter implements Filterable
                     }
                     wasWordBreak = false;
                 }
+            }
+
+            // Special case for "USA". Note that both strings have been turned to lowercase already.
+            if (prefixString.equals("usa") && string.equals("united states")) {
+                return true;
             }
             return false;
         }

@@ -267,7 +267,11 @@ public class TimeZoneData {
 
         for (int i = 0; i < length; i++) {
             TimeZoneInfo tzi = mTimeZonesById.get(ids[i]);
-            tzi.mDisplayName = labels[i];
+            if (tzi != null) {
+                tzi.mDisplayName = labels[i];
+            } else {
+                Log.e(TAG, "Could not find timezone with label: "+labels[i]);
+            }
         }
     }
 

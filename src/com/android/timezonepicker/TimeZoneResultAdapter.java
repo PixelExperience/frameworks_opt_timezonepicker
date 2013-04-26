@@ -40,6 +40,7 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
     private static final String TAG = "TimeZoneResultAdapter";
     private static final boolean DEBUG = false;
     private static final int VIEW_TAG_TIME_ZONE = R.id.time_zone;
+    private static final int EMPTY_INDEX = -100;
 
     /** SharedPref name and key for recent time zones */
     private static final String SHARED_PREFS_NAME = "com.android.calendar_preferences";
@@ -130,6 +131,7 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
 
         switch (filterType) {
             case TimeZoneFilterTypeAdapter.FILTER_TYPE_EMPTY:
+                mFilteredTimeZoneIndices[mFilteredTimeZoneLength++] = EMPTY_INDEX;
                 break;
             case TimeZoneFilterTypeAdapter.FILTER_TYPE_NONE:
                 // Show the default/current value first
@@ -265,7 +267,13 @@ public class TimeZoneResultAdapter extends BaseAdapter implements OnItemClickLis
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
 
-        if (v == null) {
+        if (mFilteredTimeZoneIndices[position] == EMPTY_INDEX) {
+            v = mInflater.inflate(R.layout.empty_time_zone_item, null);
+            return v;
+        }
+
+        // We'll need to re-inflate the view if it was null, or if it was used as an empty item.
+        if (v == null || v.findViewById(R.id.empty_item) != null) {
             v = mInflater.inflate(R.layout.time_zone_item, null);
             ViewHolder.setupViewHolder(v);
         }

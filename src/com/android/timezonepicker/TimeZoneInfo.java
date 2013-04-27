@@ -34,7 +34,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
-    private static final int DST_SYMBOL_COLOR = 0xFF606060;
+    private static final int GMT_TEXT_COLOR = TimeZonePickerUtils.GMT_TEXT_COLOR;
+    private static final int DST_SYMBOL_COLOR = TimeZonePickerUtils.DST_SYMBOL_COLOR;
     private static final char SEPARATOR = ',';
     private static final String TAG = null;
     public static int NUM_OF_TRANSITIONS = 6;
@@ -165,21 +166,29 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
             // mFormatter writes to mSB
             DateUtils.formatDateRange(context, mFormatter, now, now, flags, mTzId);
             mSB.append(' ');
+            int gmtStart = mSB.length();
             TimeZonePickerUtils.appendGmtOffset(mSB, gmtOffset);
+            int gmtEnd = mSB.length();
 
+            int symbolStart = 0;
+            int symbolEnd = 0;
             if (hasFutureDST) {
                 mSB.append(' ');
+                symbolStart = mSB.length();
                 mSB.append(TimeZonePickerUtils.getDstSymbol()); // Sun symbol
-
-                final int end = mSB.length();
-                final int start = end - 1;
-                Spannable spannableText = mSpannableFactory.newSpannable(mSB);
-                spannableText.setSpan(new ForegroundColorSpan(DST_SYMBOL_COLOR), start, end,
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                displayName = spannableText;
-            } else {
-                displayName = mSB.toString();
+                symbolEnd = mSB.length();
             }
+
+            // Set the gray colors.
+            Spannable spannableText = mSpannableFactory.newSpannable(mSB);
+            spannableText.setSpan(new ForegroundColorSpan(GMT_TEXT_COLOR),
+                    gmtStart, gmtEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            if (hasFutureDST) {
+                spannableText.setSpan(new ForegroundColorSpan(DST_SYMBOL_COLOR),
+                        symbolStart, symbolEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            displayName = spannableText;
             mGmtDisplayNameCache.put(cacheKey, displayName);
         }
         return displayName;

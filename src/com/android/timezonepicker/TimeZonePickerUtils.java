@@ -19,8 +19,11 @@ package com.android.timezonepicker;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.text.Spannable;
+import android.text.Spannable.Factory;
 import android.text.format.DateUtils;
 import android.text.format.Time;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 
 import java.util.Locale;
@@ -28,6 +31,10 @@ import java.util.TimeZone;
 
 public class TimeZonePickerUtils {
     private static final String TAG = "TimeZonePickerUtils";
+
+    public static final int GMT_TEXT_COLOR = 0xFFAAAAAA;
+    public static final int DST_SYMBOL_COLOR = 0xFFBFBFBF;
+    private static final Factory mSpannableFactory = Spannable.Factory.getInstance();
 
     private Locale mDefaultLocale;
     private String[] mOverrideIds;
@@ -47,14 +54,14 @@ public class TimeZonePickerUtils {
 
     /**
      * Given a timezone id (e.g. America/Los_Angeles), returns the corresponding timezone
-     * display name (e.g. (GMT-7.00) Pacific Time).
+     * display name (e.g. Pacific Time GMT-7).
      *
      * @param context Context in case the override labels need to be re-cached.
      * @param id The timezone id
      * @param millis The time (daylight savings or not)
      * @return The display name of the timezone.
      */
-    public String getGmtDisplayName(Context context, String id, long millis) {
+    public CharSequence getGmtDisplayName(Context context, String id, long millis) {
         TimeZone timezone = TimeZone.getTimeZone(id);
         if (timezone == null) {
             return null;
@@ -70,27 +77,45 @@ public class TimeZonePickerUtils {
         return buildGmtDisplayName(timezone, millis);
     }
 
-    private String buildGmtDisplayName(TimeZone tz, long timeMillis) {
+    private CharSequence buildGmtDisplayName(TimeZone tz, long timeMillis) {
         Time time = new Time(tz.getID());
         time.set(timeMillis);
 
         StringBuilder sb = new StringBuilder();
-        final int gmtOffset = tz.getOffset(timeMillis);
-        appendGmtOffset(sb, gmtOffset);
 
         String displayName = getDisplayName(tz, time.isDst != 0);
-        sb.append(" ");
         sb.append(displayName);
 
+        sb.append(" ");
+        final int gmtOffset = tz.getOffset(timeMillis);
+        int gmtStart = sb.length();
+        appendGmtOffset(sb, gmtOffset);
+        int gmtEnd = sb.length();
+
+        int symbolStart = 0;
+        int symbolEnd = 0;
         if (tz.useDaylightTime()) {
             sb.append(" ");
+            symbolStart = sb.length();
             sb.append(getDstSymbol()); // Sun symbol
+            symbolEnd = sb.length();
         }
-        return sb.toString();
+
+        // Set the gray colors.
+        Spannable spannableText = mSpannableFactory.newSpannable(sb);
+        spannableText.setSpan(new ForegroundColorSpan(GMT_TEXT_COLOR),
+                gmtStart, gmtEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (tz.useDaylightTime()) {
+            spannableText.setSpan(new ForegroundColorSpan(DST_SYMBOL_COLOR),
+                    symbolStart, symbolEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        CharSequence gmtDisplayName = spannableText;
+        return gmtDisplayName;
     }
 
     public static void appendGmtOffset(StringBuilder sb, final int gmtOffset) {
-        sb.append("(GMT");
+        sb.append("GMT");
 
         if (gmtOffset < 0) {
             sb.append('-');
@@ -109,7 +134,6 @@ public class TimeZonePickerUtils {
             }
             sb.append(min);
         }
-        sb.append(')');
     }
 
     public static char getDstSymbol() {

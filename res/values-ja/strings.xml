@@ -17,9 +17,7 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- no translation found for hint_time_zone_search (804776560897143016) -->
-    <skip />
+    <string name="hint_time_zone_search" msgid="804776560897143016">"国名を入力してください"</string>
     <string name="searchview_description_clear" msgid="1603860069305867810">"検索キーワードを削除"</string>
-    <!-- no translation found for no_results_found (5475293015394772651) -->
-    <skip />
+    <string name="no_results_found" msgid="5475293015394772651">"一致する検索結果はありません"</string>
 </resources>

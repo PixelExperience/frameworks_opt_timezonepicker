@@ -165,7 +165,7 @@ public class TimeZoneInfo implements Comparable<TimeZoneInfo> {
 
             // mFormatter writes to mSB
             DateUtils.formatDateRange(context, mFormatter, now, now, flags, mTzId);
-            mSB.append(' ');
+            mSB.append("  ");
             int gmtStart = mSB.length();
             TimeZonePickerUtils.appendGmtOffset(mSB, gmtOffset);
             int gmtEnd = mSB.length();

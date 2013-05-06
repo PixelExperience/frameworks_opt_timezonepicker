@@ -32,7 +32,7 @@ import java.util.TimeZone;
 public class TimeZonePickerUtils {
     private static final String TAG = "TimeZonePickerUtils";
 
-    public static final int GMT_TEXT_COLOR = 0xFFAAAAAA;
+    public static final int GMT_TEXT_COLOR = 0xFF888888;
     public static final int DST_SYMBOL_COLOR = 0xFFBFBFBF;
     private static final Factory mSpannableFactory = Spannable.Factory.getInstance();
 
@@ -59,9 +59,11 @@ public class TimeZonePickerUtils {
      * @param context Context in case the override labels need to be re-cached.
      * @param id The timezone id
      * @param millis The time (daylight savings or not)
+     * @param grayGmt Whether the "GMT+x" part of the returned string should be colored gray.
      * @return The display name of the timezone.
      */
-    public CharSequence getGmtDisplayName(Context context, String id, long millis) {
+    public CharSequence getGmtDisplayName(Context context, String id, long millis,
+             boolean grayGmt) {
         TimeZone timezone = TimeZone.getTimeZone(id);
         if (timezone == null) {
             return null;
@@ -74,10 +76,10 @@ public class TimeZonePickerUtils {
             mDefaultLocale = defaultLocale;
             cacheOverrides(context);
         }
-        return buildGmtDisplayName(timezone, millis);
+        return buildGmtDisplayName(timezone, millis, grayGmt);
     }
 
-    private CharSequence buildGmtDisplayName(TimeZone tz, long timeMillis) {
+    private CharSequence buildGmtDisplayName(TimeZone tz, long timeMillis, boolean grayGmt) {
         Time time = new Time(tz.getID());
         time.set(timeMillis);
 
@@ -86,7 +88,7 @@ public class TimeZonePickerUtils {
         String displayName = getDisplayName(tz, time.isDst != 0);
         sb.append(displayName);
 
-        sb.append(" ");
+        sb.append("  ");
         final int gmtOffset = tz.getOffset(timeMillis);
         int gmtStart = sb.length();
         appendGmtOffset(sb, gmtOffset);
@@ -103,8 +105,10 @@ public class TimeZonePickerUtils {
 
         // Set the gray colors.
         Spannable spannableText = mSpannableFactory.newSpannable(sb);
-        spannableText.setSpan(new ForegroundColorSpan(GMT_TEXT_COLOR),
-                gmtStart, gmtEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        if (grayGmt) {
+            spannableText.setSpan(new ForegroundColorSpan(GMT_TEXT_COLOR),
+                    gmtStart, gmtEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
         if (tz.useDaylightTime()) {
             spannableText.setSpan(new ForegroundColorSpan(DST_SYMBOL_COLOR),
                     symbolStart, symbolEnd, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

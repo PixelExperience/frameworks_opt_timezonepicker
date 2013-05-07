@@ -42,6 +42,9 @@ public class TimeZoneData {
     private static final boolean DEBUG = false;
     private static final int OFFSET_ARRAY_OFFSET = 20;
 
+    private static final String PALESTINE_COUNTRY_CODE = "PS";
+
+
     ArrayList<TimeZoneInfo> mTimeZones;
     LinkedHashMap<String, ArrayList<Integer>> mTimeZonesByCountry;
     HashSet<String> mTimeZoneNames = new HashSet<String>();
@@ -58,6 +61,7 @@ public class TimeZoneData {
     private boolean[] mHasTimeZonesInHrOffset = new boolean[40];
     SparseArray<ArrayList<Integer>> mTimeZonesByOffsets;
     private Context mContext;
+    private String mPalestineDisplayName;
 
     public TimeZoneData(Context context, String defaultTimeZoneId, long timeMillis) {
         mContext = context;
@@ -70,6 +74,9 @@ public class TimeZoneData {
         } else {
             mTimeMillis = timeMillis;
         }
+
+        mPalestineDisplayName = context.getResources().getString(R.string.palestine_display_name);
+
         loadTzs(context);
 
         Log.i(TAG, "Time to load time zones (ms): " + (System.currentTimeMillis() - now));
@@ -475,7 +482,12 @@ public class TimeZoneData {
 
     private String getCountryNames(String lang, String countryCode) {
         final Locale defaultLocale = Locale.getDefault();
-        String countryDisplayName = new Locale(lang, countryCode).getDisplayCountry(defaultLocale);
+        String countryDisplayName;
+        if (PALESTINE_COUNTRY_CODE.equalsIgnoreCase(countryCode)) {
+            countryDisplayName = mPalestineDisplayName;
+        } else {
+            countryDisplayName = new Locale(lang, countryCode).getDisplayCountry(defaultLocale);
+        }
 
         if (!countryCode.equals(countryDisplayName)) {
             return countryDisplayName;

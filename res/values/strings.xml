@@ -25,4 +25,12 @@
 
     <!-- Item to show when no timezones are found. [CHAR LIMIT=NONE]-->
     <string name="no_results_found">No results found</string>
+
+    <!-- Name to be displayed for "Palestine". This will be used when searching for a country to
+         select a timezone. [CHAR LIMIT=NONE]
+         *NOTE*: Please be sure to translate this as "Palestine", specifically instead of
+                 "Palestinian Territories". This is for use following Google's updated policy on
+                 this matter.
+                  -->
+    <string name="palestine_display_name">Palestine</string>
 </resources>

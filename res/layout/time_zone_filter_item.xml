@@ -31,7 +31,7 @@
         android:ellipsize="marquee"
         android:gravity="center_vertical"
         android:minHeight="32dp"
-        android:singleLine="true"
+        android:maxLines="2"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>
